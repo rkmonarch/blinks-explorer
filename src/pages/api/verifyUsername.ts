@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const {username} = req.body;
     try {
-        const existingUsername = await prisma.User.findFirst({
+        const existingUsername = await prisma.user.findFirst({
             where: {
                 username: username,
             },

@@ -5,7 +5,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { username, address } = req.body;
 
     try {
-        const existingUser = await prisma.User.findFirst({
+        const existingUser = await prisma.user.findFirst({
             where: {
                 address: address,
             },
@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(400).json({ message: "User with this address already exists" });
         }
 
-        const user = await prisma.User.create({
+        const user = await prisma.user.create({
             data: {
                 username: username,
                 address: address,

@@ -7,13 +7,13 @@ export default async function handler(
 ) {
     const {address, blink, tags} = req.body;
   try {
-    const existingUser = await prisma.User.findFirst({
+    const existingUser = await prisma.user.findFirst({
         where: {
             address: address,
         },
         });
     if (existingUser) {
-      const blinkResponse = await prisma.Blink.create({
+      const blinkResponse = await prisma.blink.create({
         data: {
           blink: blink,
           Tags: {

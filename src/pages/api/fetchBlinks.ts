@@ -8,7 +8,7 @@ export default async function handler(
   const { tags } = req.body;
   try {
     if (tags) {
-      const blinks = await prisma.Blink.findMany({
+      const blinks = await prisma.blink.findMany({
         include: {
           User: true,
           Tags: true,

@@ -8,13 +8,13 @@ export default async function handler(
   const { address, username, first_name, last_name, bio, avatar } = req.body;
 
   try {
-    const existingUser = await prisma.User.findUnique({
+    const existingUser = await prisma.user.findUnique({
       where: {
         address: address,
       },
     });
 
-    const existingUsername = await prisma.User.findFirst({
+    const existingUsername = await prisma.user.findFirst({
       where: {
         username: username,
       },
