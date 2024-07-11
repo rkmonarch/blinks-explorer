@@ -1,7 +1,7 @@
 import prisma from "@/utils/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 
-export default async function GET(
+export async function GET(
     req: NextRequest,
 ) {
     const address = req.nextUrl.searchParams.get("address");
@@ -12,11 +12,11 @@ export default async function GET(
                 address: address as string,
             },
         });
-        return NextResponse.json(JSON.stringify(user), {
+        return NextResponse.json(user, {
             status: 200
         })
     } catch (error) {
-        return NextResponse.json(JSON.stringify({ message: "Internal server error" }), {
+        return NextResponse.json({ message: "Internal server error" }, {
             status: 400
         })
     }

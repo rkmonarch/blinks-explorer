@@ -7,17 +7,17 @@ export default async function GET(req: NextRequest, res: NextResponse) {
     try {
         const existingUsername = await prisma.user.findFirst({
             where: {
-                username: username,
+                username: username as string,
             },
         });
 
-        return NextResponse.json(JSON.stringify({
+        return NextResponse.json({
             isTaken: existingUsername ? true : false
-        }), {
+        }, {
             status: 200
         })
     } catch (error) {
-        return NextResponse.json(JSON.stringify({ message: "Internal server error" }), {
+        return NextResponse.json({ message: "Internal server error" }, {
             status: 400
         })
     }

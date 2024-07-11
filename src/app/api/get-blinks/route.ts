@@ -1,7 +1,7 @@
 import prisma from "@/utils/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 
-export default async function POST(
+export async function POST(
     req: NextRequest,
     res: NextResponse
 ) {
@@ -23,7 +23,7 @@ export default async function POST(
                     },
                 },
             });
-            return NextResponse.json(JSON.stringify(blinks), {
+            return NextResponse.json(blinks, {
                 status: 200
             })
         } else {
@@ -33,12 +33,12 @@ export default async function POST(
                     Tags: true,
                 },
             });
-            return NextResponse.json(JSON.stringify(blinks), {
+            return NextResponse.json(blinks, {
                 status: 200
             })
         }
     } catch (error) {
-        return NextResponse.json(JSON.stringify({ message: "Internal server error" }), {
+        return NextResponse.json({ message: "Internal server error" }, {
             status: 400
         })
     }

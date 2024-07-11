@@ -1,7 +1,7 @@
 import prisma from "@/utils/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 
-export default async function POST(
+export async function POST(
     req: NextRequest,
     res: NextResponse
 ) {
@@ -34,16 +34,16 @@ export default async function POST(
                     avatar: avatar,
                 },
             });
-            return NextResponse.json(JSON.stringify(updatedUser), {
+            return NextResponse.json(updatedUser, {
                 status: 200
             })
         } else if (existingUsername) {
-            return NextResponse.json(JSON.stringify({ message: "Username already taken" }), {
+            return NextResponse.json({ message: "Username already taken" }, {
                 status: 400
             })
         }
     } catch (error) {
-        return NextResponse.json(JSON.stringify({ message: "Internal server error" }), {
+        return NextResponse.json({ message: "Internal server error" }, {
             status: 400
         })
     }
