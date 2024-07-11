@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id         String   @id @default(uuid()) @db.Uuid
+  address    String   @unique
+  username   String
+  avatar     String?
+  first_name String?
+  last_name  String?
+  bio        String?
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  Blink      Blink[]
+}
+
+model Blink {
+  id        String   @id @default(uuid()) @db.Uuid
+  blink     String
+  address   String
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  Tags      Tags[]
+  User      User     @relation(fields: [address], references: [address], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Tags {
+  id        String   @id @default(uuid()) @db.Uuid
+  tag       String
+  blink_id  String   @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  Blink     Blink    @relation(fields: [blink_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
