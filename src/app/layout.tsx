@@ -1,7 +1,7 @@
+import Providers from "@/components/providers";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import AppWalletProvider from "../components/AppWalletProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,10 +16,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AppWalletProvider>
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
-    </AppWalletProvider>
+    <Providers>
+      <html lang="en">
+        <body className={inter.className}>{children}</body>
+      </html>
+    </Providers>
   );
 }
