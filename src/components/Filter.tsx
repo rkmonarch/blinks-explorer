@@ -3,26 +3,31 @@ import { Button } from "./ui/button";
 import FilterIcon from "@/icons/FilterIcon";
 import { Tags } from "@/utils/constant";
 import { useQuery } from "@tanstack/react-query";
+import useBlinkStore from "@/store/blinks";
 
 export default function Filter() {
-const [selectedTag, setSelectedTag] = useState<string>("");
+  const [selectedTag, setSelectedTag] = useState<string>("");
+  const { setStoreBlinks } = useBlinkStore();
 
   async function getBlinks() {
-    const response = await fetch('/api/get-blinks', {
-      method: 'POST',
+    const response = await fetch("/api/get-blinks", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        tags: selectedTag ? [selectedTag] : [],
-      }),
+      body: JSON.stringify(
+        selectedTag ? { tags: [selectedTag] } : {}
+      ),
     });
-    return response.json();
+    const blinks = await response.json();
+    setStoreBlinks(blinks);
+    return blinks; 
   }
 
-  const { data: blinks } = useQuery({
-    queryKey: ['blinkURL', selectedTag],
+  const { data: blinks, refetch } = useQuery({
+    queryKey: ["blinkURL", selectedTag],
     queryFn: getBlinks,
+    enabled: !!selectedTag || selectedTag === '', 
   });
 
   const toggleTag = (tag: string) => {
@@ -38,7 +43,7 @@ const [selectedTag, setSelectedTag] = useState<string>("");
       <div className="flex items-center gap-2 overflow-scroll no-scrollbar">
         <Button
           className={!selectedTag ? "bg-black text-white" : ""}
-          onClick={() => setSelectedTag("")}
+          onClick={() => setSelectedTag("")} // Clear the selection
         >
           All
         </Button>

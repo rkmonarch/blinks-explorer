@@ -1,8 +1,10 @@
 import React from "react";
 import BlinkCard from "./cards/BlinkCard";
 import { useQuery } from '@tanstack/react-query';
+import useBlinkStore from "@/store/blinks";
 
 export default function Blinks() {
+  const {storeBlinks, setStoreBlinks} = useBlinkStore();
 
   async function getBlinks() {
     const response = await fetch('/api/get-blinks', {
@@ -12,6 +14,8 @@ export default function Blinks() {
       },
       body: JSON.stringify({}),
     });
+    const blinks = await response.json();
+    setStoreBlinks(blinks);
     return response.json();
   }
 
@@ -21,9 +25,9 @@ export default function Blinks() {
   });
    
   return (
-   blinks ?
+   storeBlinks ?
    <section className="containter mx-auto columns-3">
-      {blinks.map((blink:Blink) => (
+      {storeBlinks.map((blink:Blink) => (
         <BlinkCard 
         blink={blink.blink}
         website={new URL(blink.blink).hostname}

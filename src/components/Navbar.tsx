@@ -5,36 +5,60 @@ import { Button } from "./ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogTrigger } from "@radix-ui/react-dialog";
 import CreateBlinkModal from "./modals/CreateBlinkModal";
+import useUserStore from "@/store/user";
 
 export default function Navbar() {
   const { connected, publicKey } = useWallet();
+  const {
+    username,
+    avatar,
+    first_name,
+    last_name,
+    bio,
+    setUsername,
+    setAvatar,
+    setFirstName,
+    setLastName,
+    setBio,
+  } = useUserStore();
 
   async function getOrCreateUser() {
     const getUser = await fetch(`/api/get-profile?address=${publicKey}`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
     const user = await getUser.json();
+    setUsername(user.username);
+    setAvatar(user.avatar);
+    setFirstName(user.first_name);
+    setLastName(user.last_name);
+    setBio(user.bio);
     if (!user) {
-      const createUser = await fetch('/api/create-profile', {
-        method: 'POST',
+      const createUser = await fetch("/api/create-profile", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           address: publicKey,
-          username: publicKey?.toBase58().trim().slice(0, 8)
+          username: publicKey?.toBase58().trim().slice(0, 8),
         }),
       });
+      const user = await createUser.json();
+      setUsername(user.username);
+      setAvatar(user.avatar);
+      setFirstName(user.first_name);
+      setLastName(user.last_name);
+      setBio(user.bio);
       return createUser.json();
     }
     return user;
   }
-  
+
   const { data: user } = useQuery({
-    queryKey: ['user', publicKey],
+    queryKey: ["user", publicKey],
     queryFn: getOrCreateUser,
     enabled: connected,
   });
@@ -42,7 +66,7 @@ export default function Navbar() {
   return (
     <nav className="container mx-auto flex items-center justify-between py-4">
       <h1>Only Blink</h1>
-      {connected ? (
+      {connected && user? (
         <div className="flex items-center gap-2">
           <Dialog>
             <DialogTrigger asChild>
@@ -53,7 +77,7 @@ export default function Navbar() {
             </DialogContent>
           </Dialog>
           <Avatar className="w-9 h-9">
-            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarImage src={avatar ? avatar : "https://github.com/shadcn.png"} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </div>
