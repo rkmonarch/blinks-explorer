@@ -30,11 +30,13 @@ export default function Navbar() {
       },
     });
     const user = await getUser.json();
-    setUsername(user.username);
-    setAvatar(user.avatar);
-    setFirstName(user.first_name);
-    setLastName(user.last_name);
-    setBio(user.bio);
+    if (user) {
+      setUsername(user.username);
+      setAvatar(user.avatar);
+      setFirstName(user.first_name);
+      setLastName(user.last_name);
+      setBio(user.bio);
+    }
     if (!user) {
       const createUser = await fetch("/api/create-profile", {
         method: "POST",
@@ -66,7 +68,7 @@ export default function Navbar() {
   return (
     <nav className="container mx-auto flex items-center justify-between py-4">
       <h1>Only Blink</h1>
-      {connected && user? (
+      {connected && user ? (
         <div className="flex items-center gap-2">
           <Dialog>
             <DialogTrigger asChild>
@@ -77,7 +79,9 @@ export default function Navbar() {
             </DialogContent>
           </Dialog>
           <Avatar className="w-9 h-9">
-            <AvatarImage src={avatar ? avatar : "https://github.com/shadcn.png"} />
+            <AvatarImage
+              src={avatar ? avatar : "https://github.com/shadcn.png"}
+            />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </div>
