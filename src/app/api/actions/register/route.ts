@@ -1,17 +1,11 @@
+import prisma from "@/utils/prisma-client";
+import { OpenAPIHono } from "@hono/zod-openapi";
 import {
   ACTIONS_CORS_HEADERS,
   ActionGetResponse,
-  ActionPostRequest,
-  ActionPostResponse,
-  createPostResponse,
+  ActionPostRequest
 } from "@solana/actions";
-import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import {
-  actionSpecOpenApiPostRequestBody,
-  actionsSpecOpenApiPostResponse,
-} from "@/utils/openapi";
 import { PublicKey } from "@solana/web3.js";
-import prisma from "@/utils/prisma-client";
 
 export const GET = async () => {
   const payload: ActionGetResponse = {
@@ -22,7 +16,7 @@ export const GET = async () => {
     links: {
       actions: [
         {
-          href: "/api/register?blink={blink}&tag={tag}",
+          href: "/api/actions/register?blink={blink}&tag={tag}",
           label: "Register Blink",
           parameters: [
             {
@@ -111,7 +105,7 @@ export const POST = async (req: Request) => {
           },
         });
         return new Response(JSON.stringify({
-           message: "Blink registered successfully!"
+          message: "Blink registered successfully!"
         }), {
           status: 200,
           headers: ACTIONS_CORS_HEADERS,
