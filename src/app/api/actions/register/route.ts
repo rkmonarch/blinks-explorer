@@ -1,6 +1,5 @@
 import { Tags, isValidURL } from "@/utils/constant";
 import prisma from "@/utils/prisma-client";
-import { OpenAPIHono } from "@hono/zod-openapi";
 import {
   ACTIONS_CORS_HEADERS,
   ActionGetResponse,
@@ -42,8 +41,6 @@ export const GET = async () => {
 
 export const OPTIONS = GET;
 
-const app = new OpenAPIHono();
-
 export const POST = async (req: Request) => {
   const url = new URL(req.url);
   const blink = url.searchParams.get("blink");
@@ -63,17 +60,17 @@ export const POST = async (req: Request) => {
   try {
     const invalidTags = tag?.split(",").filter((tag: string) => !Tags.includes(tag));
     if (invalidTags!.length > 0) {
-        return NextResponse.json({ message: `Tags should be from the list: ${Tags.join(', ')}` }, {
-            status: 400
-        });
+      return NextResponse.json({ message: `Tags should be from the list: ${Tags.join(', ')}` }, {
+        status: 400
+      });
     }
 
     const invalidBlink = isValidURL(blink as string);
 
     if (!invalidBlink) {
-        return NextResponse.json({ message: "Invalid URL" }, {
-            status: 400
-        });
+      return NextResponse.json({ message: "Invalid URL" }, {
+        status: 400
+      });
     }
 
     const existingUser = await prisma.user.findFirst({

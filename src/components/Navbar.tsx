@@ -3,6 +3,8 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { useQuery } from "@tanstack/react-query";
+import { Dialog, DialogContent, DialogTrigger } from "@radix-ui/react-dialog";
+import CreateBlinkModal from "./modals/CreateBlinkModal";
 
 export default function Navbar() {
   const { connected, publicKey } = useWallet();
@@ -42,7 +44,14 @@ export default function Navbar() {
       <h1>Only Blink</h1>
       {connected ? (
         <div className="flex items-center gap-2">
-          <Button>Create</Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>Create</Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md rounded-lg">
+              <CreateBlinkModal />
+            </DialogContent>
+          </Dialog>
           <Avatar className="w-9 h-9">
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>CN</AvatarFallback>

@@ -1,14 +1,6 @@
-import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import LinkIcon from "@/icons/LinkIcon";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import BlinkModal from "../modals/BlinkModal";
 import useBlink from "@/hooks/useBlink";
 import { useQuery } from "@tanstack/react-query";
@@ -30,8 +22,8 @@ export default function BlinkCard(props: BlinkCardProps) {
   return (
     <Dialog>
       <DialogTrigger className="break-inside-avoid mb-4 w-full">
-        <img src={blink?.icon} alt="" className="rounded-xl w-full" />
-        <div className="flex items-center justify-between mt-3">
+      <img src={blink?.icon} alt="" className="rounded-xl" style={{ width: '100%', height: 'auto' }} />
+      <div className="flex items-center justify-between mt-3">
           <div className="flex items-center gap-2">
             <Avatar className="w-6 h-6">
               <AvatarImage src={props.avatar === null ? "https://github.com/shadcn.png" : props.avatar} />
