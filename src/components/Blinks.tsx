@@ -19,9 +19,7 @@ export default function Blinks() {
     queryKey: ['blinkURL'],
     queryFn: ({ queryKey }) => getBlinks(),
   });
-  
-  console.log(blinks);
- 
+   
   return (
    blinks ?
    <section className="containter mx-auto columns-3">
