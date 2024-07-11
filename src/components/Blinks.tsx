@@ -16,7 +16,7 @@ export default function Blinks() {
   return (
     <section className="containter mx-auto columns-3">
       {Images.map((blink) => (
-        <BlinkCard image={blink} />
+        <BlinkCard image={blink} key={blink}/>
       ))}
     </section>
   );

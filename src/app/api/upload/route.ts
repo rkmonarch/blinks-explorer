@@ -3,12 +3,6 @@ import fs from 'fs';
 import PinataClient from '@pinata/sdk';
 const pinata = new PinataClient({ pinataJWTKey: process.env.PINATA_JWT });
 
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-};
-
 interface UploadedFile {
     filepath: string;
     originalFilename: string;

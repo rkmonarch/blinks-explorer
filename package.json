@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hono/zod-openapi": "^0.14.9",
     "@pinata/sdk": "^2.1.0",
     "@prisma/client": "^5.16.2",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",
+    "@solana/actions": "^1.1.1",
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-adapter-react": "^0.15.35",
     "@solana/wallet-adapter-react-ui": "^0.9.35",
@@ -28,7 +30,8 @@
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "@asteasolutions/zod-to-openapi": "^7.1.1"
   },
   "devDependencies": {
     "@types/formidable": "^3.4.5",
