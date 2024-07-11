@@ -2,10 +2,41 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Navbar() {
   const { connected, publicKey } = useWallet();
+
+  async function getOrCreateUser() {
+    const getUser = await fetch(`/api/get-profile?address=${publicKey}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const user = await getUser.json();
+    if (!user) {
+      const createUser = await fetch('/api/create-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          address: publicKey,
+          username: publicKey?.toBase58().trim().slice(0, 8)
+        }),
+      });
+      return createUser.json();
+    }
+    return user;
+  }
   
+  const { data: user } = useQuery({
+    queryKey: ['user', publicKey],
+    queryFn: getOrCreateUser,
+    enabled: connected,
+  });
+
   return (
     <nav className="container mx-auto flex items-center justify-between py-4">
       <h1>Only Blink</h1>

@@ -102,7 +102,7 @@ export const POST = async (req: Request) => {
       const user = await prisma.user.create({
         data: {
           address: account.toBase58(),
-          username: account.toBase58().trim().slice(0, 5),
+          username: account.toBase58().trim().slice(0, 8),
         },
       });
       if (user) {

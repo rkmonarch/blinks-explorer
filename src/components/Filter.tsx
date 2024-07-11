@@ -5,7 +5,7 @@ import { Tags } from "@/utils/constant";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Filter() {
-  const [selectedTag, setSelectedTag] = useState<string>("");
+const [selectedTag, setSelectedTag] = useState<string>("");
 
   async function getBlinks() {
     const response = await fetch('/api/get-blinks', {
