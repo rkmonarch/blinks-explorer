@@ -1,5 +1,6 @@
 import React from "react";
 import BlinkCard from "./cards/BlinkCard";
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 
 const Images = [
   "https://s3-alpha-sig.figma.com/img/35be/6598/a096795824098e92b56ab04401477268?Expires=1721606400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=hwxDrEbU25Z3mEx5RLbIoQ~TUbnVbuKhx2Rg13B7-NLzdoJvP8j7JgQatSa0tGVmiPsFpqMEUD-nbkGGPcW5yfYqfpI~xu-BC~o6reABmVq2MqN0-WgP4GJszw~E7B2kX8D3-un7Adk42y1yQs2cikN0q3Y5Lf3w6tZudHv8qvPGs3en~N4Kpva6gMpSwXIRlI3AKLtpSvCozdJCe~vazREJy4GnYsUsJdbN9Nco8Sz2XD6W43cSDU7XQlRqcmuGRRME3B8aOITE32NG0bwZl711o~1xqoH9WL49l47I~jrqqWPhkmxdQftmwV47PtW8nUEE-5wtCcbFo7OCljMFRQ__",
@@ -13,6 +14,19 @@ const Images = [
 ];
 
 export default function Blinks() {
+
+  async function fetchBlinks() {
+    const response = await fetch('/api/get-blinks');
+    return response.json();
+  }
+
+  const { data: blinks } = useQuery({
+    queryKey: ['blinkURL'],
+    queryFn: ({ queryKey }) => fetchBlinks(),
+  });
+
+  console.log("blinks", blinks);
+
   return (
     <section className="containter mx-auto columns-3">
       {Images.map((blink) => (

@@ -31,7 +31,8 @@
     "react-dom": "^18",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
-    "@asteasolutions/zod-to-openapi": "^7.1.1"
+    "@asteasolutions/zod-to-openapi": "^7.1.1",
+    "@tanstack/react-query": "^5.50.1"
   },
   "devDependencies": {
     "@types/formidable": "^3.4.5",
