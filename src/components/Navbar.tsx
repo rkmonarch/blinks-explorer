@@ -2,15 +2,24 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import CreateBlinkModal from "./modals/CreateBlinkModal";
 
 export default function Navbar() {
-  const { connected, publicKey } = useWallet();
+  const { connected } = useWallet();
   return (
     <nav className="container mx-auto flex items-center justify-between py-4">
       <h1>Only Blink</h1>
       {connected ? (
         <div className="flex items-center gap-2">
-          <Button>Create</Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>Create</Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md rounded-lg">
+              <CreateBlinkModal />
+            </DialogContent>
+          </Dialog>
           <Avatar className="w-9 h-9">
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>CN</AvatarFallback>
