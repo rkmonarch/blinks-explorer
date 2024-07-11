@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 
 export default function Navbar() {
-  const { connected } = useWallet();
+  const { connected, publicKey } = useWallet();
   return (
     <nav className="container mx-auto flex items-center justify-between py-4">
       <h1>Only Blink</h1>

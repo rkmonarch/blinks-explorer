@@ -1,3 +1,4 @@
+import { Tags, isValidURL } from "@/utils/constant";
 import prisma from "@/utils/prisma-client";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import {
@@ -6,6 +7,7 @@ import {
   ActionPostRequest
 } from "@solana/actions";
 import { PublicKey } from "@solana/web3.js";
+import { NextResponse } from "next/server";
 
 export const GET = async () => {
   const payload: ActionGetResponse = {
@@ -59,6 +61,21 @@ export const POST = async (req: Request) => {
   }
 
   try {
+    const invalidTags = tag?.split(",").filter((tag: string) => !Tags.includes(tag));
+    if (invalidTags!.length > 0) {
+        return NextResponse.json({ message: `Tags should be from the list: ${Tags.join(', ')}` }, {
+            status: 400
+        });
+    }
+
+    const invalidBlink = isValidURL(blink as string);
+
+    if (!invalidBlink) {
+        return NextResponse.json({ message: "Invalid URL" }, {
+            status: 400
+        });
+    }
+
     const existingUser = await prisma.user.findFirst({
       where: {
         address: account.toBase58(),
