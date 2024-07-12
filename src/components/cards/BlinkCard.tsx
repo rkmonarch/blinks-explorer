@@ -22,7 +22,7 @@ export default function BlinkCard(props: BlinkCardProps) {
   return (
     <div className="break-inside-avoid mb-4 w-full">
       <Dialog>
-        <DialogTrigger className="w-full">
+        <DialogTrigger className="w-full border border-gray-200 rounded-xl">
           <img
             src={blink?.icon}
             alt=""
