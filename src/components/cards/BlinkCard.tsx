@@ -5,7 +5,7 @@ import BlinkModal from "../modals/BlinkModal";
 import useBlink from "@/hooks/useBlink";
 import { useQuery } from "@tanstack/react-query";
 
-type BlinkCardProps = {
+export type BlinkCardProps = {
   blink: string;
   username: string;
   avatar: string;
@@ -31,7 +31,7 @@ export default function BlinkCard(props: BlinkCardProps) {
           />
         </DialogTrigger>
         <DialogContent className="w-screen h-full backdrop-blur-2xl bg-white bg-opacity-90">
-          <BlinkModal />
+          <BlinkModal blink={blink!} link={props.blink} avatar={props.avatar} username={props.username}/>
         </DialogContent>
       </Dialog>
       <div className="flex items-center justify-between mt-3">

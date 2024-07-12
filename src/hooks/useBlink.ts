@@ -1,4 +1,4 @@
-import type { Blink, ErrorType, TransactionData } from '../types/blink';
+import type { Blink, ErrorType, TransactionData } from "../types/blink";
 
 export default function useBlink() {
   async function fetchBlink(url: string): Promise<Blink> {
@@ -9,11 +9,11 @@ export default function useBlink() {
   async function fetchTransaction(
     url: string,
     account: string
-  ): Promise<TransactionData | ErrorType> {
+  ): Promise<TransactionData> {
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ account: account }),
     });
