@@ -13,6 +13,14 @@ export default function Blinks() {
 
   if (isLoading) return <BlinksSkeleton />;
 
+  if (storeBlinks.length === 0) {
+    return (
+      <div className="h-96 w-full flex items-center justify-center">
+        <p className="text-gray-500 font-semibold text-sm">Blinks not found</p>
+      </div>
+    );
+  }
+
   return (
     <section className=" columns-3">
       {storeBlinks.map((blink: Blink) => (

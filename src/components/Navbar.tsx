@@ -9,11 +9,13 @@ import CreateBlinkModal from "./modals/CreateBlinkModal";
 import useUserStore from "@/store/user";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import UserProfileModal from "./modals/UserProfileModal";
+import { useState } from "react";
 
 export default function Navbar() {
   const { connected, publicKey } = useWallet();
   const { avatar, setUsername, setAvatar, setFirstName, setLastName, setBio } =
     useUserStore();
+  const [isOpen, setIsOpen] = useState(false);
 
   async function getOrCreateUser() {
     const getUser = await fetch(`/api/get-profile?address=${publicKey}`, {
@@ -63,25 +65,34 @@ export default function Navbar() {
       <h1>Only Blink</h1>
       {connected && user ? (
         <div className="flex items-center gap-2">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>Create</Button>
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger
+              asChild
+              onClick={() => {
+                setIsOpen(true);
+              }}
+            >
+              <Button>Register Blink</Button>
             </DialogTrigger>
             <DialogContent className="max-w-sm rounded-lg">
-              <CreateBlinkModal />
+              <CreateBlinkModal
+                onClick={() => {
+                  setIsOpen(false);
+                }}
+              />
             </DialogContent>
           </Dialog>
           <Dialog>
             {/* <DialogTrigger> */}
-              <Avatar className="w-9 h-9">
-                <AvatarImage
-                  src={avatar ? avatar : "https://github.com/shadcn.png"}
-                />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              {/* <DialogContent className="max-w-sm rounded-lg"> */}
-                {/* <UserProfileModal /> */}
-              {/* </DialogContent> */}
+            {/* <Avatar className="w-9 h-9">
+              <AvatarImage
+                src={avatar ? avatar : "https://github.com/shadcn.png"}
+              />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar> */}
+            {/* <DialogContent className="max-w-sm rounded-lg"> */}
+            {/* <UserProfileModal /> */}
+            {/* </DialogContent> */}
             {/* </DialogTrigger> */}
           </Dialog>
         </div>

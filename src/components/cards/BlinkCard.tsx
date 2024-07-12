@@ -20,18 +20,23 @@ export default function BlinkCard(props: BlinkCardProps) {
   });
 
   return (
-    <div className="break-inside-avoid">
+    <div className="break-inside-avoid mb-4 w-full">
       <Dialog>
-        <DialogTrigger className="mb-4 w-full">
+        <DialogTrigger className="w-full">
           <img
             src={blink?.icon}
             alt=""
-            className="rounded-xl"
+            className="rounded-xl w-full"
             style={{ width: "100%", height: "auto" }}
           />
         </DialogTrigger>
         <DialogContent className="w-screen h-full backdrop-blur-2xl bg-white bg-opacity-90">
-          <BlinkModal blink={blink!} link={props.blink} avatar={props.avatar} username={props.username}/>
+          <BlinkModal
+            blink={blink!}
+            link={props.blink}
+            avatar={props.avatar}
+            username={props.username}
+          />
         </DialogContent>
       </Dialog>
       <div className="flex items-center justify-between mt-3">

@@ -6,7 +6,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import MultipleSelector, { Option } from "../ui/multiple-selector";
 import useCreateBlinkStore from "@/store/create";
 
-export default function CreateBlinkModal() {
+export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
   const { connected, publicKey } = useWallet();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { blinkLink, setBlinkLink, setSelectedTags, selectedTags } =
@@ -17,10 +17,6 @@ export default function CreateBlinkModal() {
     if (!blinkLink) return;
     setIsLoading(true);
 
-    const tags = (selectedTags: Option[]): string[] => {
-      return selectedTags.map((tag) => tag.value);
-    };
-
     try {
       const response = await fetch("/api/create-blink", {
         method: "POST",
@@ -30,7 +26,7 @@ export default function CreateBlinkModal() {
         body: JSON.stringify({
           address: publicKey?.toBase58(),
           blink: blinkLink,
-          tags: tags,
+          tags: selectedTags.map((tag) => tag.value),
         }),
       });
       const data = await response.json();
@@ -40,6 +36,7 @@ export default function CreateBlinkModal() {
     } finally {
       setIsLoading(false);
       setBlinkLink("");
+      onClick();
     }
   }
 

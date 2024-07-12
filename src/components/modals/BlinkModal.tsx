@@ -6,11 +6,10 @@ import { connection } from "@/utils/connection";
 import { getRawTransaction } from "@/utils/rawTransaction";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Transaction } from "@solana/web3.js";
-import { Badge } from "../ui/badge";
+import { ChangeEvent, useState } from "react";
+import Spinner from "../Spinner";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import useBlinkStore from "@/store/blinks";
-import { ChangeEvent, useState } from "react";
 
 export default function BlinkModal({
   blink,
@@ -27,9 +26,11 @@ export default function BlinkModal({
   const host = new URL(link).hostname;
   const { publicKey, sendTransaction } = useWallet();
   const [inputs, setInputs] = useState<{ [key: string]: string }>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePress = async (link: string) => {
     try {
+      setIsLoading(true);
       if (!publicKey) return;
       const result = await fetchTransaction(link, publicKey!.toBase58());
       let transaction = result.transaction;
@@ -37,6 +38,8 @@ export default function BlinkModal({
       const sign = await sendTransaction(tx as Transaction, connection);
     } catch (e) {
       console.error(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -97,12 +100,13 @@ export default function BlinkModal({
             </div> */}
           </div>
           <div>
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-4 flex-wrap">
               {blink.links
                 ? blink.links.actions.map((action, index) => {
                     if (!action.parameters) {
                       return (
                         <Button
+                          disabled={isLoading}
                           key={action.label}
                           onClick={async () => {
                             let actionUrl = action.href;
@@ -113,7 +117,7 @@ export default function BlinkModal({
                             index
                           )}
                         >
-                          {action.label}
+                          {isLoading ? <Spinner /> : action.label}
                         </Button>
                       );
                     }
@@ -133,6 +137,7 @@ export default function BlinkModal({
                       />
                     ))}
                     <Button
+                      disabled={isLoading}
                       key={action.label}
                       onClick={async () => {
                         let actionUrl = action.href;
@@ -150,19 +155,20 @@ export default function BlinkModal({
                         handlePress("https://" + host + actionUrl);
                       }}
                     >
-                      {action.label}
+                      {isLoading ? <Spinner /> : action.label}
                     </Button>
                   </div>
                 ) : null
               )
             ) : (
               <Button
+                disabled={isLoading}
                 onClick={async () => {
                   handlePress(link);
                 }}
                 className="w-full"
               >
-                {blink.label}
+                {isLoading ? <Spinner /> : blink.label}
               </Button>
             )}
           </div>
