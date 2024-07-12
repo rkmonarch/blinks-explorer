@@ -30,7 +30,7 @@ export default function CreateBlinkModal() {
         body: JSON.stringify({
           address: publicKey?.toBase58(),
           blink: blinkLink,
-          tags: tags,
+          tags: tags(selectedTags),
         }),
       });
       const data = await response.json();
