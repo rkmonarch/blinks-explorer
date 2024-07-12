@@ -1,3 +1,5 @@
+"use client";
+
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -9,18 +11,8 @@ import useUserStore from "@/store/user";
 
 export default function Navbar() {
   const { connected, publicKey } = useWallet();
-  const {
-    username,
-    avatar,
-    first_name,
-    last_name,
-    bio,
-    setUsername,
-    setAvatar,
-    setFirstName,
-    setLastName,
-    setBio,
-  } = useUserStore();
+  const { avatar, setUsername, setAvatar, setFirstName, setLastName, setBio } =
+    useUserStore();
 
   async function getOrCreateUser() {
     const getUser = await fetch(`/api/get-profile?address=${publicKey}`, {

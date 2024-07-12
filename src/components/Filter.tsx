@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Button } from "./ui/button";
 import FilterIcon from "@/icons/FilterIcon";
@@ -15,19 +17,17 @@ export default function Filter() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(
-        selectedTag ? { tags: [selectedTag] } : {}
-      ),
+      body: JSON.stringify(selectedTag ? { tags: [selectedTag] } : {}),
     });
     const blinks = await response.json();
     setStoreBlinks(blinks);
-    return blinks; 
+    return blinks;
   }
 
   const { data: blinks, refetch } = useQuery({
     queryKey: ["blinkURL", selectedTag],
     queryFn: getBlinks,
-    enabled: !!selectedTag || selectedTag === '', 
+    enabled: !!selectedTag || selectedTag === "",
   });
 
   const toggleTag = (tag: string) => {
@@ -42,8 +42,9 @@ export default function Filter() {
       </Button>
       <div className="flex items-center gap-2 overflow-scroll no-scrollbar">
         <Button
+          variant={"outline"}
           className={!selectedTag ? "bg-black text-white" : ""}
-          onClick={() => setSelectedTag("")} // Clear the selection
+          onClick={() => setSelectedTag("")}
         >
           All
         </Button>

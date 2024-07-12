@@ -34,7 +34,7 @@ export default function CreateBlinkModal() {
       setBlink("");
     }
   }
-  
+
   return (
     <section>
       <h4 className="font-semibold text-2xl text-center">Share your Blink</h4>

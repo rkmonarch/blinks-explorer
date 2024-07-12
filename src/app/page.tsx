@@ -1,5 +1,3 @@
-"use client";
-
 import Blinks from "@/components/Blinks";
 import Filter from "@/components/Filter";
 import Navbar from "@/components/Navbar";
