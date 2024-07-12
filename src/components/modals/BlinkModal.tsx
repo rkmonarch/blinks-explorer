@@ -70,6 +70,7 @@ export default function BlinkModal({
                     if (!action.parameters) {
                       return (
                         <RenderMultipleButtons
+                          key={index}
                           action={action}
                           count={
                             blink?.links?.actions?.filter(
@@ -85,9 +86,9 @@ export default function BlinkModal({
                 : null}
             </div>
             {blink.links ? (
-              blink.links.actions.map((action) =>
+              blink.links.actions.map((action, index) =>
                 action.parameters ? (
-                  <RenderInputs action={action} link={link} />
+                  <RenderInputs key={index} action={action} link={link} />
                 ) : null
               )
             ) : (
