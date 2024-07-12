@@ -62,7 +62,7 @@ export default function Navbar() {
   });
 
   return (
-    <nav className="container mx-auto flex items-center justify-between py-4">
+    <nav className="flex items-center justify-between py-4">
       <Image src="/logo.svg" alt="Logo" width={128} height={42} />
       {connected && user ? (
         <div className="flex items-center gap-2">

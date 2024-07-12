@@ -19,17 +19,17 @@ export default function BlinkModal({
 }) {
   return (
     <section className="container mx-auto flex items-center">
-      <div className="flex items-stretch justify-around w-full">
+      <div className="flex flex-col md:flex-row items-stretch justify-around w-full gap-4">
         <img
           src={blink.icon}
           alt=""
-          className="rounded-3xl aspect-square w-1/2 object-cover"
+          className="rounded-3xl aspect-square w-full md:w-1/2 object-cover"
         />
-        <div className="w-1/2 px-16 flex flex-col justify-between">
+        <div className="w-full md:w-1/2 md:px-16 flex flex-col justify-between">
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between mt-3">
               <div className="flex items-center gap-2">
-                <Avatar className="w-10 h-10">
+                <Avatar className="w-6 h-6 md:w-10 md:h-10">
                   <AvatarImage
                     src={
                       avatar === null ? "https://github.com/shadcn.png" : avatar
@@ -37,7 +37,7 @@ export default function BlinkModal({
                   />
                   <AvatarFallback>{username}</AvatarFallback>
                 </Avatar>
-                <p className="text-xl text-gray-500">{username}</p>
+                <p className="md:text-xl text-gray-500">{username}</p>
               </div>
               <div className="flex items-center gap-1">
                 <LinkIcon width={16} height={16} color="#B5B5B5" />
@@ -76,11 +76,13 @@ export default function BlinkModal({
                 : null}
             </div>
             {blink.links ? (
-              blink.links.actions.map((action, index) =>
-                action.parameters ? (
-                  <RenderInputs key={index} action={action} link={link} />
-                ) : null
-              )
+              <div className="flex flex-col gap-4 flex-wrap">
+                {blink.links.actions.map((action, index) =>
+                  action.parameters ? (
+                    <RenderInputs key={index} action={action} link={link} />
+                  ) : null
+                )}
+              </div>
             ) : (
               <RenderSingleButton blink={blink} link={link} />
             )}

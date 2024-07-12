@@ -41,7 +41,7 @@ export default function BlinkCard(props: BlinkCardProps) {
       </Dialog>
       <div className="flex items-center justify-between mt-3">
         <div className="flex items-center gap-2">
-          <Avatar className="w-6 h-6">
+          <Avatar className="w-4 h-4 sm:w-6 sm:h-6">
             <AvatarImage
               src={
                 props.avatar === null

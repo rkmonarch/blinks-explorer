@@ -22,7 +22,7 @@ export default function Blinks() {
   }
 
   return (
-    <section className="columns-3 mb-10">
+    <section className="columns-1 sm:columns-2 lg:columns-3 mb-10">
       {storeBlinks.map((blink: Blink) => (
         <BlinkCard
           blink={blink.blink}
