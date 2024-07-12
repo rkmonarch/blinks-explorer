@@ -10,6 +10,7 @@ import useUserStore from "@/store/user";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import UserProfileModal from "./modals/UserProfileModal";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function Navbar() {
   const { connected, publicKey } = useWallet();
@@ -62,7 +63,7 @@ export default function Navbar() {
 
   return (
     <nav className="container mx-auto flex items-center justify-between py-4">
-      <h1>Only Blink</h1>
+      <Image src="/logo.svg" alt="Logo" width={140} height={40} />
       {connected && user ? (
         <div className="flex items-center gap-2">
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
