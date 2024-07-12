@@ -1,19 +1,16 @@
-import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import LinkIcon from "@/icons/LinkIcon";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import { Blink } from "@/types/blink";
-import useUserStore from "@/store/user";
 import useBlink from "@/hooks/useBlink";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { Input } from "../ui/input";
-import { Transaction, Connection, VersionedTransaction } from "@solana/web3.js";
+import LinkIcon from "@/icons/LinkIcon";
+import { Blink } from "@/types/blink";
 import { connection } from "@/utils/connection";
 import { getRawTransaction } from "@/utils/rawTransaction";
-import { useSearchParams } from "next/navigation";
-import prisma from "@/utils/prisma-client";
-import { useQuery } from "@tanstack/react-query";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { Transaction } from "@solana/web3.js";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import useBlinkStore from "@/store/blinks";
+import { ChangeEvent, useState } from "react";
 
 export default function BlinkModal({
   blink,
@@ -29,7 +26,8 @@ export default function BlinkModal({
   const { fetchTransaction } = useBlink();
   const host = new URL(link).hostname;
   const { publicKey, sendTransaction } = useWallet();
-  
+  const [inputs, setInputs] = useState<{ [key: string]: string }>({});
+
   const handlePress = async (link: string) => {
     try {
       if (!publicKey) return;
@@ -58,6 +56,14 @@ export default function BlinkModal({
     }
   };
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setInputs((prevInputs) => ({
+      ...prevInputs,
+      [name]: value,
+    }));
+  };
+
   return (
     <section className="container mx-auto flex items-center">
       <div className="h-2/3 flex items-stretch justify-around w-full">
@@ -72,7 +78,7 @@ export default function BlinkModal({
               <div className="flex items-center gap-2">
                 <Avatar className="w-10 h-10">
                   <AvatarImage src={avatar} />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarFallback>{username}</AvatarFallback>
                 </Avatar>
                 <p className="text-xl text-gray-500">{username}</p>
               </div>
@@ -85,10 +91,10 @@ export default function BlinkModal({
               <h3 className="font-bold text-2xl">{blink.title}</h3>
               <p className="mt-2">{blink.description}</p>
             </div>
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <Badge className="bg-white text-black py-1 px-3">Nft</Badge>
               <Badge className="bg-white text-black py-1 px-3">Airdrop</Badge>
-            </div>
+            </div> */}
           </div>
           <div>
             <div className="flex items-center gap-3 mb-4">
@@ -123,6 +129,7 @@ export default function BlinkModal({
                         placeholder={parameter.label}
                         key={parameter.name}
                         name={parameter.name}
+                        onChange={handleChange}
                       />
                     ))}
                     <Button
