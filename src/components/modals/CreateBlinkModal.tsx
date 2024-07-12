@@ -8,6 +8,7 @@ import useCreateBlinkStore from "@/store/create";
 import Spinner from "../Spinner";
 import useBlink from "@/hooks/useBlink";
 import useBlinks from "@/hooks/useBlinks";
+import {toast} from 'react-toastify';
 
 export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
   const { connected, publicKey } = useWallet();
@@ -15,12 +16,19 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
   const { blinkLink, setBlinkLink, setSelectedTags, selectedTags } =
     useCreateBlinkStore();
   const { refetch } = useBlinks();
+  const { fetchBlink } = useBlink();
 
   async function createBlink() {
     try {
       if (!connected) return;
       if (!blinkLink) return;
       setIsLoading(true);
+      const isValid = await fetchBlink(blinkLink);
+      console.log(isValid);
+      if (!isValid) {
+        setIsLoading(false);
+        return;
+      }
       const response = await fetch("/api/create-blink", {
         method: "POST",
         headers: {
