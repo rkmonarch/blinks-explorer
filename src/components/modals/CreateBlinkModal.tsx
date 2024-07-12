@@ -6,12 +6,15 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import MultipleSelector, { Option } from "../ui/multiple-selector";
 import useCreateBlinkStore from "@/store/create";
 import Spinner from "../Spinner";
+import useBlink from "@/hooks/useBlink";
+import useBlinks from "@/hooks/useBlinks";
 
 export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
   const { connected, publicKey } = useWallet();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { blinkLink, setBlinkLink, setSelectedTags, selectedTags } =
     useCreateBlinkStore();
+  const { refetch } = useBlinks();
 
   async function createBlink() {
     try {
@@ -34,6 +37,7 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
     } catch (error) {
       console.error(error);
     } finally {
+      await refetch();
       setIsLoading(false);
       setBlinkLink("");
       onClick();
@@ -80,7 +84,7 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
             defaultOptions={Tags}
             placeholder="Select suitable tags"
             emptyIndicator={
-              <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+              <p className="text-center text-sm text-gray-600 dark:text-gray-400">
                 No more tags
               </p>
             }
