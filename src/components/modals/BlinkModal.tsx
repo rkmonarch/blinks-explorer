@@ -12,6 +12,8 @@ import { Transaction, Connection, VersionedTransaction } from "@solana/web3.js";
 import { connection } from "@/utils/connection";
 import { getRawTransaction } from "@/utils/rawTransaction";
 import { useSearchParams } from "next/navigation";
+import prisma from "@/utils/prisma-client";
+import { useQuery } from "@tanstack/react-query";
 
 export default function BlinkModal({
   blink,
@@ -27,7 +29,7 @@ export default function BlinkModal({
   const { fetchTransaction } = useBlink();
   const host = new URL(link).hostname;
   const { publicKey, sendTransaction } = useWallet();
-
+  
   const handlePress = async (link: string) => {
     try {
       if (!publicKey) return;
@@ -35,7 +37,6 @@ export default function BlinkModal({
       let transaction = result.transaction;
       const tx = await getRawTransaction(transaction);
       const sign = await sendTransaction(tx as Transaction, connection);
-      console.log(sign);
     } catch (e) {
       console.error(e);
     }
@@ -93,7 +94,6 @@ export default function BlinkModal({
             <div className="flex items-center gap-3 mb-4">
               {blink.links
                 ? blink.links.actions.map((action, index) => {
-                    console.log(blink.links?.actions);
                     if (!action.parameters) {
                       return (
                         <Button
@@ -117,7 +117,7 @@ export default function BlinkModal({
             {blink.links ? (
               blink.links.actions.map((action) =>
                 action.parameters ? (
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3" key={""}>
                     {action.parameters.map((parameter) => (
                       <Input
                         placeholder={parameter.label}
@@ -129,6 +129,17 @@ export default function BlinkModal({
                       key={action.label}
                       onClick={async () => {
                         let actionUrl = action.href;
+                        action?.parameters?.forEach((param) => {
+                          const value = (
+                            document.querySelector(
+                              `input[name=${param.name}]`
+                            ) as HTMLInputElement
+                          ).value;
+                          actionUrl = actionUrl.replace(
+                            `{${param.name}}`,
+                            value
+                          );
+                        });
                         handlePress("https://" + host + actionUrl);
                       }}
                     >

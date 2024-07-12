@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import CreateBlinkModal from "./modals/CreateBlinkModal";
 import useUserStore from "@/store/user";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import UserProfileModal from "./modals/UserProfileModal";
 
 export default function Navbar() {
   const { connected, publicKey } = useWallet();
@@ -70,12 +71,19 @@ export default function Navbar() {
               <CreateBlinkModal />
             </DialogContent>
           </Dialog>
-          <Avatar className="w-9 h-9">
-            <AvatarImage
-              src={avatar ? avatar : "https://github.com/shadcn.png"}
-            />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+          <Dialog>
+            {/* <DialogTrigger> */}
+              <Avatar className="w-9 h-9">
+                <AvatarImage
+                  src={avatar ? avatar : "https://github.com/shadcn.png"}
+                />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              {/* <DialogContent className="max-w-sm rounded-lg"> */}
+                {/* <UserProfileModal /> */}
+              {/* </DialogContent> */}
+            {/* </DialogTrigger> */}
+          </Dialog>
         </div>
       ) : (
         <div>
