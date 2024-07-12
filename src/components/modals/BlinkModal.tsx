@@ -8,9 +8,10 @@ import useUserStore from "@/store/user";
 import useBlink from "@/hooks/useBlink";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Input } from "../ui/input";
-import { Transaction, Connection, VersionedTransaction } from '@solana/web3.js'
+import { Transaction, Connection, VersionedTransaction } from "@solana/web3.js";
 import { connection } from "@/utils/connection";
 import { getRawTransaction } from "@/utils/rawTransaction";
+import { useSearchParams } from "next/navigation";
 
 export default function BlinkModal({
   blink,
@@ -25,7 +26,7 @@ export default function BlinkModal({
 }) {
   const { fetchTransaction } = useBlink();
   const host = new URL(link).hostname;
-  const { publicKey, sendTransaction } = useWallet()
+  const { publicKey, sendTransaction } = useWallet();
 
   const handlePress = async (link: string) => {
     try {
@@ -37,6 +38,22 @@ export default function BlinkModal({
       console.log(sign);
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  const ButtonsWithoutParameters =
+    blink?.links?.actions?.filter((action) => !action.parameters).length || 0;
+
+  const getButtonClass = (count: number, index: number) => {
+    if (
+      count === 1 ||
+      (count % 3 !== 0 && index >= Math.floor(count / 3) * 3)
+    ) {
+      return "w-full";
+    } else if (count % 3 === 0 && index >= Math.floor(count / 3) * 3) {
+      return "w-1/3";
+    } else {
+      return "w-1/3";
     }
   };
 
@@ -72,34 +89,65 @@ export default function BlinkModal({
               <Badge className="bg-white text-black py-1 px-3">Airdrop</Badge>
             </div>
           </div>
-          {blink.links ? (
-            blink.links.actions.map((action) =>
-              action.parameters ? (
-                action.parameters.map((parameter) => (
-                  <Input key={parameter.name} name={parameter.name} />
-                )
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              {blink.links
+                ? blink.links.actions.map((action, index) => {
+                    console.log(blink.links?.actions);
+                    if (!action.parameters) {
+                      return (
+                        <Button
+                          key={action.label}
+                          onClick={async () => {
+                            let actionUrl = action.href;
+                            handlePress("https://" + host + actionUrl);
+                          }}
+                          className={getButtonClass(
+                            ButtonsWithoutParameters,
+                            index
+                          )}
+                        >
+                          {action.label}
+                        </Button>
+                      );
+                    }
+                  })
+                : null}
+            </div>
+            {blink.links ? (
+              blink.links.actions.map((action) =>
+                action.parameters ? (
+                  <div className="flex flex-col gap-3">
+                    {action.parameters.map((parameter) => (
+                      <Input
+                        placeholder={parameter.label}
+                        key={parameter.name}
+                        name={parameter.name}
+                      />
+                    ))}
+                    <Button
+                      key={action.label}
+                      onClick={async () => {
+                        let actionUrl = action.href;
+                        handlePress("https://" + host + actionUrl);
+                      }}
+                    >
+                      {action.label}
+                    </Button>
+                  </div>
+                ) : null
               )
-              ) : (
-                <Button
-                  key={action.label}
-                  onClick={async () => {
-                    let actionUrl = action.href;
-                    handlePress('https://' + host +  actionUrl);
-                  }}
-                >
-                  {action.label}
-                </Button>
-              )
-            )
-          ) : (
-            <Button
-              onClick={async () => {
-                handlePress(link);
-              }}
-            >
-              {blink.label}
-            </Button>
-          )}
+            ) : (
+              <Button
+                onClick={async () => {
+                  handlePress(link);
+                }}
+                className="w-full"
+              >
+                {blink.label}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </section>
