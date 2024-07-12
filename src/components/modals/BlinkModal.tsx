@@ -33,8 +33,8 @@ export default function BlinkModal() {
                 Ladies of the Vale | Powered by Truffle
               </h3>
               <p className="mt-2">
-                19 / 69 Minted - Limit: 6 - GRAFFITO's Genesis Collection on
-                Truffle.
+                19 / 69 Minted - Limit: 6 - GRAFFITO&apos;s Genesis Collection
+                on Truffle.
               </p>
             </div>
             <div className="flex items-center gap-2">
