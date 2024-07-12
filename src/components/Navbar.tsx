@@ -63,7 +63,7 @@ export default function Navbar() {
 
   return (
     <nav className="container mx-auto flex items-center justify-between py-4">
-      <Image src="/logo.svg" alt="Logo" width={140} height={40} />
+      <Image src="/logo.jpeg" alt="Logo" width={42} height={42} />
       {connected && user ? (
         <div className="flex items-center gap-2">
           <Dialog open={isOpen} onOpenChange={setIsOpen}>

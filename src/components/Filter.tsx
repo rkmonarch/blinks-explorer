@@ -10,10 +10,10 @@ export default function Filter() {
 
   return (
     <section className="flex items-center gap-4">
-      <Button className="flex items-center gap-2" variant={"secondary"}>
+      {/* <Button className="flex items-center gap-2" variant={"secondary"}>
         <FilterIcon width={16} height={16} color="black" />
         Filters
-      </Button>
+      </Button> */}
       <div className="flex items-center gap-2 overflow-scroll no-scrollbar">
         <Button
           variant={"outline"}
