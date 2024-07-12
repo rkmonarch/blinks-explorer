@@ -58,7 +58,12 @@ export default function RenderInputs({
             ).value;
             actionUrl = actionUrl.replace(`{${param.name}}`, value);
           });
-          handlePress("https://" + host + actionUrl);
+          if (actionUrl.startsWith("http")) {
+            handlePress(actionUrl);
+          }
+          else {
+            handlePress("https://" + host + actionUrl);
+          }
         }}
       >
         {isLoading ? <Spinner /> : action.label}

@@ -8,7 +8,7 @@ import useCreateBlinkStore from "@/store/create";
 import Spinner from "../Spinner";
 import useBlink from "@/hooks/useBlink";
 import useBlinks from "@/hooks/useBlinks";
-import {toast} from 'react-toastify';
+import { toast, ToastContainer } from "react-toastify";
 
 export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
   const { connected, publicKey } = useWallet();
@@ -24,8 +24,8 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
       if (!blinkLink) return;
       setIsLoading(true);
       const isValid = await fetchBlink(blinkLink);
-      console.log(isValid);
       if (!isValid) {
+        toast.error("Invalid Blink URL");
         setIsLoading(false);
         return;
       }
@@ -43,7 +43,7 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error(error);
+      toast.error("Failed to create blink");
     } finally {
       await refetch();
       setIsLoading(false);
@@ -111,5 +111,6 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
         </Button>
       </div>
     </section>
+   
   );
 }
