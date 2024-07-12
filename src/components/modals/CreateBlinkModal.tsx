@@ -3,17 +3,24 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { useWallet } from "@solana/wallet-adapter-react";
+import MultipleSelector, { Option } from "../ui/multiple-selector";
+import useCreateBlinkStore from "@/store/create";
+import Spinner from "../Spinner";
+import useBlink from "@/hooks/useBlink";
+import useBlinks from "@/hooks/useBlinks";
 
-export default function CreateBlinkModal() {
+export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
   const { connected, publicKey } = useWallet();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [blink, setBlink] = React.useState<string>("");
+  const { blinkLink, setBlinkLink, setSelectedTags, selectedTags } =
+    useCreateBlinkStore();
+  const { refetch } = useBlinks();
 
   async function createBlink() {
-    if (!connected) return;
-    if (!blink) return;
-    setIsLoading(true);
     try {
+      if (!connected) return;
+      if (!blinkLink) return;
+      setIsLoading(true);
       const response = await fetch("/api/create-blink", {
         method: "POST",
         headers: {
@@ -21,8 +28,8 @@ export default function CreateBlinkModal() {
         },
         body: JSON.stringify({
           address: publicKey?.toBase58(),
-          blink: blink,
-          tags: ["DEFI"],
+          blink: blinkLink,
+          tags: selectedTags.map((tag) => tag.value),
         }),
       });
       const data = await response.json();
@@ -30,11 +37,28 @@ export default function CreateBlinkModal() {
     } catch (error) {
       console.error(error);
     } finally {
+      await refetch();
       setIsLoading(false);
-      setBlink("");
+      setBlinkLink("");
+      onClick();
     }
   }
-  
+
+  const Tags = [
+    { label: "Nfts", value: "NFTs" },
+    { label: "Defi", value: "DEFI" },
+    { label: "Infrastructure", value: "INFRASTRUCTURE" },
+    { label: "Swap", value: "SWAP" },
+    { label: "Airdrop", value: "AIRDROP" },
+    { label: "Social", value: "SOCIAL" },
+    { label: "Staking", value: "STAKING" },
+    { label: "Trading", value: "TRADING" },
+    { label: "Games", value: "GAMES" },
+    { label: "Voting", value: "VOTING" },
+    { label: "Dao", value: "DAO" },
+    { label: "Memes", value: "MEMES" },
+  ];
+
   return (
     <section>
       <h4 className="font-semibold text-2xl text-center">Share your Blink</h4>
@@ -44,8 +68,7 @@ export default function CreateBlinkModal() {
             Blink URL
           </Label>
           <Input
-            onChange={(e) => setBlink(e.target.value)}
-            value={blink}
+            onChange={(e) => setBlinkLink(e.target.value)}
             id="link"
             placeholder="Enter Blink URL"
             className="bg-secondary border border-border rounded-xl"
@@ -53,22 +76,30 @@ export default function CreateBlinkModal() {
         </div>
         <div className="flex flex-col space-y-1.5">
           <Label htmlFor="link" className="text-sm font-medium mb-1">
-            Blink Link
+            Tags
           </Label>
-          <Input
-            id="link"
-            placeholder="Enter Blink Link"
+          <MultipleSelector
+            badgeClassName="bg-white text-black hover:bg-white"
             className="bg-secondary border border-border rounded-xl"
+            defaultOptions={Tags}
+            placeholder="Select suitable tags"
+            emptyIndicator={
+              <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+                No more tags
+              </p>
+            }
+            onChange={(options) => setSelectedTags(options)}
           />
         </div>
         <Button
+          disabled={isLoading}
           onClick={(e) => {
             e.preventDefault();
             createBlink();
           }}
           className="w-full rounded-xl"
         >
-          Share
+          {isLoading ? <Spinner /> : "Share"}
         </Button>
       </div>
     </section>

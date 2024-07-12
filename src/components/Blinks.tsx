@@ -1,69 +1,66 @@
-import React from "react";
-import BlinkCard from "./cards/BlinkCard";
-import { useQuery } from '@tanstack/react-query';
+"use client";
+
+import useBlinks from "@/hooks/useBlinks";
 import useBlinkStore from "@/store/blinks";
+import BlinkCard from "./cards/BlinkCard";
+import BlinksSkeleton from "./skeletons/BlinksSkeleton";
 
 export default function Blinks() {
-  const {storeBlinks, setStoreBlinks} = useBlinkStore();
+  const { storeBlinks } = useBlinkStore();
+  const { isLoading, isError } = useBlinks();
 
-  async function getBlinks() {
-    const response = await fetch('/api/get-blinks', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({}),
-    });
-    const blinks = await response.json();
-    setStoreBlinks(blinks);
-    return response.json();
+  if (isError) return;
+
+  if (isLoading) return <BlinksSkeleton />;
+
+  if (storeBlinks.length === 0) {
+    return (
+      <div className="h-96 w-full flex items-center justify-center">
+        <p className="text-gray-500 font-semibold text-sm">Blinks not found</p>
+      </div>
+    );
   }
 
-  const { data: blinks } = useQuery({
-    queryKey: ['blinkURL'],
-    queryFn: ({ queryKey }) => getBlinks(),
-  });
-   
   return (
-   storeBlinks ?
-   <section className="containter mx-auto columns-3">
-      {storeBlinks.map((blink:Blink) => (
-        <BlinkCard 
-        blink={blink.blink}
-        website={new URL(blink.blink).hostname}
-        username={blink.User.username}
-        avatar={blink.User.avatar}
-        key={blink.blink} />
+    <section className="columns-3 mb-10">
+      {storeBlinks.map((blink: Blink) => (
+        <BlinkCard
+          blink={blink.blink}
+          website={new URL(blink.blink).hostname}
+          username={blink.User.username}
+          avatar={blink.User.avatar}
+          key={blink.blink}
+        />
       ))}
-    </section> : <div>Loading...</div>
+    </section>
   );
 }
 
-export type Blinks = Blink[]
+export type Blinks = Blink[];
 
 export interface Blink {
-  id: string
-  blink: string
-  address: string
-  createdAt: string
-  User: User
-  Tags: Tag[]
+  id: string;
+  blink: string;
+  address: string;
+  createdAt: string;
+  User: User;
+  Tags: Tag[];
 }
 
 export interface User {
-  id: string
-  address: string
-  username: string
-  avatar: any
-  first_name: any
-  last_name: any
-  bio: any
-  created_at: string
+  id: string;
+  address: string;
+  username: string;
+  avatar: any;
+  first_name: any;
+  last_name: any;
+  bio: any;
+  created_at: string;
 }
 
 export interface Tag {
-  id: string
-  tag: string
-  blink_id: string
-  createdAt: string
+  id: string;
+  tag: string;
+  blink_id: string;
+  createdAt: string;
 }

@@ -1,0 +1,29 @@
+import useBlinkStore from '@/store/blinks';
+import { useQuery } from '@tanstack/react-query';
+import React, { useState } from 'react'
+
+export default function useBlinks() {
+    const [selectedTag, setSelectedTag] = useState<string>("");
+    const { setStoreBlinks } = useBlinkStore()
+
+    async function getBlinks() {
+        const response = await fetch("/api/get-blinks", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(selectedTag ? { tags: [selectedTag] } : {}),
+        });
+        const blinks = await response.json();
+        setStoreBlinks(blinks);
+        return blinks;
+    }
+
+    const { data, isLoading, isError, refetch } = useQuery({
+        queryKey: ["blinkURL", selectedTag],
+        queryFn: getBlinks,
+        enabled: !!selectedTag || selectedTag === "",
+    });
+
+    return { isError, isLoading, refetch, selectedTag, setSelectedTag }
+}

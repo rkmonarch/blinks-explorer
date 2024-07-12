@@ -5,7 +5,7 @@ import BlinkModal from "../modals/BlinkModal";
 import useBlink from "@/hooks/useBlink";
 import { useQuery } from "@tanstack/react-query";
 
-type BlinkCardProps = {
+export type BlinkCardProps = {
   blink: string;
   username: string;
   avatar: string;
@@ -20,26 +20,44 @@ export default function BlinkCard(props: BlinkCardProps) {
   });
 
   return (
-    <Dialog>
-      <DialogTrigger className="break-inside-avoid mb-4 w-full">
-      <img src={blink?.icon} alt="" className="rounded-xl" style={{ width: '100%', height: 'auto' }} />
+    <div className="break-inside-avoid mb-4 w-full">
+      <Dialog>
+        <DialogTrigger className="w-full">
+          <img
+            src={blink?.icon}
+            alt=""
+            className="rounded-xl w-full"
+            style={{ width: "100%", height: "auto" }}
+          />
+        </DialogTrigger>
+        <DialogContent className="w-screen h-full backdrop-blur-2xl bg-white bg-opacity-90">
+          <BlinkModal
+            blink={blink!}
+            link={props.blink}
+            avatar={props.avatar}
+            username={props.username}
+          />
+        </DialogContent>
+      </Dialog>
       <div className="flex items-center justify-between mt-3">
-          <div className="flex items-center gap-2">
-            <Avatar className="w-6 h-6">
-              <AvatarImage src={props.avatar === null ? "https://github.com/shadcn.png" : props.avatar} />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <p className="text-sm">{props.username}</p>
-          </div>
-          <div className="flex items-center gap-1">
-            <LinkIcon width={16} height={16} color="#B5B5B5" />
-            <p className="text-xs text-gray-500">{props.website}</p>
-          </div>
+        <div className="flex items-center gap-2">
+          <Avatar className="w-6 h-6">
+            <AvatarImage
+              src={
+                props.avatar === null
+                  ? "https://github.com/shadcn.png"
+                  : props.avatar
+              }
+            />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <p className="text-sm">{props.username}</p>
         </div>
-      </DialogTrigger>
-      <DialogContent className="w-screen h-full backdrop-blur-2xl bg-white bg-opacity-40">
-        <BlinkModal />
-      </DialogContent>
-    </Dialog>
+        <div className="flex items-center gap-1">
+          <LinkIcon width={16} height={16} color="#B5B5B5" />
+          <p className="text-xs text-gray-500">{props.website}</p>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -27,6 +27,6 @@ export interface Blink {
   
   export interface TransactionData {
     transaction: string;
-    message: string;
+    message?: string;
   }
   
