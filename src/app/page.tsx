@@ -1,6 +1,7 @@
 import Blinks from "@/components/Blinks";
 import Filter from "@/components/Filter";
 import Navbar from "@/components/Navbar";
+import BlinksSkeleton from "@/components/skeletons/BlinksSkeleton";
 
 export default function Home() {
   return (

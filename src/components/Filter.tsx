@@ -1,38 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import { Button } from "./ui/button";
+import useBlinks from "@/hooks/useBlinks";
 import FilterIcon from "@/icons/FilterIcon";
 import { Tags } from "@/utils/constant";
-import { useQuery } from "@tanstack/react-query";
-import useBlinkStore from "@/store/blinks";
+import { Button } from "./ui/button";
 
 export default function Filter() {
-  const [selectedTag, setSelectedTag] = useState<string>("");
-  const { setStoreBlinks } = useBlinkStore();
-
-  async function getBlinks() {
-    const response = await fetch("/api/get-blinks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(selectedTag ? { tags: [selectedTag] } : {}),
-    });
-    const blinks = await response.json();
-    setStoreBlinks(blinks);
-    return blinks;
-  }
-
-  const { data: blinks, refetch } = useQuery({
-    queryKey: ["blinkURL", selectedTag],
-    queryFn: getBlinks,
-    enabled: !!selectedTag || selectedTag === "",
-  });
-
-  const toggleTag = (tag: string) => {
-    setSelectedTag((prevTag) => (prevTag === tag ? "" : tag));
-  };
+  const { selectedTag, setSelectedTag } = useBlinks();
 
   return (
     <section className="flex items-center gap-4">
@@ -51,7 +25,7 @@ export default function Filter() {
         {Tags.map((tag) => (
           <Button
             key={tag}
-            onClick={() => toggleTag(tag)}
+            onClick={() => setSelectedTag(tag)}
             className={selectedTag === tag ? "bg-black text-white" : ""}
             variant={"outline"}
           >

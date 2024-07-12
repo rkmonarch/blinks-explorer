@@ -1,33 +1,20 @@
 "use client";
 
-import React from "react";
-import BlinkCard from "./cards/BlinkCard";
-import { useQuery } from "@tanstack/react-query";
+import useBlinks from "@/hooks/useBlinks";
 import useBlinkStore from "@/store/blinks";
+import BlinkCard from "./cards/BlinkCard";
+import BlinksSkeleton from "./skeletons/BlinksSkeleton";
 
 export default function Blinks() {
-  const { storeBlinks, setStoreBlinks } = useBlinkStore();
+  const { storeBlinks } = useBlinkStore();
+  const { isLoading, isError } = useBlinks();
 
-  async function getBlinks() {
-    const response = await fetch("/api/get-blinks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({}),
-    });
-    const blinks = await response.json();
-    setStoreBlinks(blinks);
-    return response.json();
-  }
+  if (isError) return;
 
-  const { data: blinks } = useQuery({
-    queryKey: ["blinkURL"],
-    queryFn: ({ queryKey }) => getBlinks(),
-  });
+  if (isLoading) return <BlinksSkeleton />;
 
-  return storeBlinks ? (
-    <section className="containter mx-auto columns-3">
+  return (
+    <section className=" columns-3">
       {storeBlinks.map((blink: Blink) => (
         <BlinkCard
           blink={blink.blink}
@@ -38,8 +25,6 @@ export default function Blinks() {
         />
       ))}
     </section>
-  ) : (
-    <div>Loading...</div>
   );
 }
 
