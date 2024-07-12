@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { useWallet } from "@solana/wallet-adapter-react";
 import MultipleSelector, { Option } from "../ui/multiple-selector";
 import useCreateBlinkStore from "@/store/create";
+import Spinner from "../Spinner";
 
 export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
   const { connected, publicKey } = useWallet();
@@ -13,11 +14,10 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
     useCreateBlinkStore();
 
   async function createBlink() {
-    if (!connected) return;
-    if (!blinkLink) return;
-    setIsLoading(true);
-
     try {
+      if (!connected) return;
+      if (!blinkLink) return;
+      setIsLoading(true);
       const response = await fetch("/api/create-blink", {
         method: "POST",
         headers: {
@@ -88,13 +88,14 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
           />
         </div>
         <Button
+          disabled={isLoading}
           onClick={(e) => {
             e.preventDefault();
             createBlink();
           }}
           className="w-full rounded-xl"
         >
-          Share
+          {isLoading ? <Spinner /> : "Share"}
         </Button>
       </div>
     </section>

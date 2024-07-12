@@ -80,7 +80,7 @@ export default function BlinkModal({
             <div className="flex items-center justify-between mt-3">
               <div className="flex items-center gap-2">
                 <Avatar className="w-10 h-10">
-                  <AvatarImage src={avatar} />
+                  <AvatarImage src={avatar === null ? "https://github.com/shadcn.png" : avatar} />
                   <AvatarFallback>{username}</AvatarFallback>
                 </Avatar>
                 <p className="text-xl text-gray-500">{username}</p>
