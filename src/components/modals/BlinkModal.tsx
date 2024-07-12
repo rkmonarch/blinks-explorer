@@ -17,25 +17,15 @@ export default function BlinkModal({
   avatar: string;
   username: string;
 }) {
-  const [inputs, setInputs] = useState<{ [key: string]: string }>({});
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      [name]: value,
-    }));
-  };
-
   return (
     <section className="container mx-auto flex items-center">
-      <div className="h-2/3 flex items-stretch justify-around w-full">
+      <div className="flex items-stretch justify-around w-full">
         <img
           src={blink.icon}
           alt=""
-          className="rounded-3xl w-1/3 object-cover"
+          className="rounded-3xl aspect-square w-1/2 object-cover"
         />
-        <div className="w-1/3 flex flex-col justify-between">
+        <div className="w-1/2 px-16 flex flex-col justify-between">
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between mt-3">
               <div className="flex items-center gap-2">
