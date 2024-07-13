@@ -17,7 +17,9 @@ export default function Filter() {
       <div className="flex items-center gap-2 overflow-scroll no-scrollbar">
         <Button
           variant={"outline"}
-          className={!selectedTag ? "bg-black text-white" : ""}
+          className={`font-sf_pro_rounded px-4 py-1 font-medium ${
+            !selectedTag ? "bg-black text-white" : ""
+          }`}
           onClick={() => setSelectedTag("")}
         >
           All
@@ -26,7 +28,9 @@ export default function Filter() {
           <Button
             key={tag}
             onClick={() => setSelectedTag(tag)}
-            className={selectedTag === tag ? "bg-black text-white" : ""}
+            className={`font-sf_pro_rounded px-4 py-1 font-medium ${
+              selectedTag === tag ? "bg-black text-white" : ""
+            }`}
             variant={"outline"}
           >
             {tag}

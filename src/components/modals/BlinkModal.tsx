@@ -37,16 +37,22 @@ export default function BlinkModal({
                   />
                   <AvatarFallback>{username}</AvatarFallback>
                 </Avatar>
-                <p className="md:text-xl text-gray-500">{username}</p>
+                <p className="md:text-lg font-inter text-gray-500">
+                  {username}
+                </p>
               </div>
               <div className="flex items-center gap-1">
                 <LinkIcon width={16} height={16} color="#B5B5B5" />
-                <p className="text-gray-500">{new URL(link).hostname}</p>
+                <p className="text-gray-500 font-inter">
+                  {new URL(link).hostname}
+                </p>
               </div>
             </div>
             <div>
-              <h3 className="font-bold text-2xl">{blink.title}</h3>
-              <p className="mt-2">{blink.description}</p>
+              <h3 className="font-bold text-2xl font-sf_pro_rounded">
+                {blink.title}
+              </h3>
+              <p className="mt-2 font-sf_pro_rounded">{blink.description}</p>
             </div>
             {/* <div className="flex items-center gap-2">
               <Badge className="bg-white text-black py-1 px-3">Nft</Badge>

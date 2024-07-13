@@ -20,7 +20,7 @@ export default function BlinkCard(props: BlinkCardProps) {
   });
 
   return (
-    <div className="break-inside-avoid mb-4 w-full">
+    <div className="break-inside-avoid mb-6 w-full">
       <Dialog>
         <DialogTrigger className="w-full border border-gray-200 rounded-xl">
           <img
@@ -51,11 +51,11 @@ export default function BlinkCard(props: BlinkCardProps) {
             />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <p className="text-sm">{props.username}</p>
+          <p className="text-sm font-inter">{props.username}</p>
         </div>
         <div className="flex items-center gap-1">
           <LinkIcon width={16} height={16} color="#B5B5B5" />
-          <p className="text-xs text-gray-500">{props.website}</p>
+          <p className="text-xs text-gray-500 font-inter">{props.website}</p>
         </div>
       </div>
     </div>

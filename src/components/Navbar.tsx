@@ -73,7 +73,9 @@ export default function Navbar() {
                 setIsOpen(true);
               }}
             >
-              <Button>Register Blink</Button>
+              <Button className="font-sf_pro_rounded font-medium px-5 py-2">
+                Register Blink
+              </Button>
             </DialogTrigger>
             <DialogContent className="max-w-sm rounded-lg">
               <CreateBlinkModal

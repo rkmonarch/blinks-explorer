@@ -103,7 +103,9 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
 
   return (
     <section>
-      <h4 className="font-semibold text-2xl text-center">Share your Blink</h4>
+      <h4 className="font-semibold text-2xl text-center font-sf_pro_rounded">
+        Share your Blink
+      </h4>
       <div className="flex flex-col gap-4 mt-6">
         <div className="flex flex-col space-y-1.5">
           <Label htmlFor="link" className="text-sm font-medium mb-1">

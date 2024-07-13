@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
-    <main className="container mx-auto flex flex-col gap-8">
+    <main className="flex flex-col gap-8 px-4">
       <Navbar />
       <Filter />
       <Blinks />
