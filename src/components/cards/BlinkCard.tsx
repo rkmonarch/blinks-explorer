@@ -26,7 +26,7 @@ export default function BlinkCard(props: BlinkCardProps) {
           <img
             src={blink?.icon}
             alt=""
-            className="rounded-xl w-full"
+            className="rounded-xl w-full md:min-h-96 bg-white"
             style={{ width: "100%", height: "auto" }}
           />
         </DialogTrigger>

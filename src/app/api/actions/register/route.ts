@@ -135,7 +135,7 @@ export const POST = async (req: Request) => {
   } catch (error) {
     console.log(error);
     return new Response("Internal server error", {
-      status: 400,
+      status: 500,
       headers: ACTIONS_CORS_HEADERS,
     });
   }

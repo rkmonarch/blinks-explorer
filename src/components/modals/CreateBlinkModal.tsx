@@ -9,10 +9,12 @@ import Spinner from "../Spinner";
 import useBlink from "@/hooks/useBlink";
 import useBlinks from "@/hooks/useBlinks";
 import { toast } from "react-toastify";
+import prisma from "@/utils/prisma-client";
 
 export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
   const { connected, publicKey } = useWallet();
   const [isValidURL, setIsValidURL] = useState(true);
+  const [isNotExists, setIsNotExists] = useState(true);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { blinkLink, setBlinkLink, setSelectedTags, selectedTags } =
     useCreateBlinkStore();
@@ -34,6 +36,20 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
     }
   }
 
+  async function alreadyExists() {
+    try {
+      const res = await fetch(`/api/already-exists?link=${blinkLink}`);
+      const data = await res.json();
+      if (data) {
+        setIsNotExists(false);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function createBlink() {
     try {
       if (!connected) return;
@@ -41,6 +57,11 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
       setIsLoading(true);
       const isValid = await handleValidation();
       if (!isValid) {
+        setIsLoading(false);
+        return;
+      }
+      const isExits = await alreadyExists();
+      if (isExits) {
         setIsLoading(false);
         return;
       }
@@ -98,8 +119,15 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
             }`}
             onFocus={() => {
               setIsValidURL(true);
+              setIsNotExists(true);
             }}
           />
+          {!isValidURL && (
+            <p className="text-xs text-red-500">Please enter valid blink</p>
+          )}
+          {!isNotExists && (
+            <p className="text-xs text-red-500">Blink already exists</p>
+          )}
         </div>
         <div className="flex flex-col space-y-1.5">
           <Label htmlFor="link" className="text-sm font-medium mb-1">
