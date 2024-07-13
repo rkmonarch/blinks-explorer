@@ -114,8 +114,9 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
             id="link"
             placeholder="Enter Blink URL"
             className={`bg-secondary border border-border rounded-xl ${
-              !isValidURL ||
-              (!isNotExists && "ring-2 ring-offset-2 ring-red-400")
+              !isValidURL || !isNotExists
+                ? "ring-2 ring-offset-2 ring-red-400"
+                : ""
             }`}
             onFocus={() => {
               setIsValidURL(true);
