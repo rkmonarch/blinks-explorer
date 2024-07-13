@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
@@ -8,24 +8,39 @@ import useCreateBlinkStore from "@/store/create";
 import Spinner from "../Spinner";
 import useBlink from "@/hooks/useBlink";
 import useBlinks from "@/hooks/useBlinks";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
   const { connected, publicKey } = useWallet();
+  const [isValidURL, setIsValidURL] = useState(true);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { blinkLink, setBlinkLink, setSelectedTags, selectedTags } =
     useCreateBlinkStore();
   const { refetch } = useBlinks();
   const { fetchBlink } = useBlink();
 
+  async function handleValidation() {
+    try {
+      const isValid = await fetchBlink(blinkLink);
+      if (!isValid) {
+        setIsValidURL(false);
+        setIsLoading(false);
+        return false;
+      }
+      return true;
+    } catch (error) {
+      setIsValidURL(false);
+      console.log(error);
+    }
+  }
+
   async function createBlink() {
     try {
       if (!connected) return;
       if (!blinkLink) return;
       setIsLoading(true);
-      const isValid = await fetchBlink(blinkLink);
+      const isValid = await handleValidation();
       if (!isValid) {
-        toast.error("Invalid Blink URL");
         setIsLoading(false);
         return;
       }
@@ -41,14 +56,13 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
         }),
       });
       const data = await response.json();
+      await refetch();
+      onClick();
       return data;
     } catch (error) {
       toast.error("Failed to create blink");
     } finally {
-      await refetch();
       setIsLoading(false);
-      setBlinkLink("");
-      onClick();
     }
   }
 
@@ -79,7 +93,12 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
             onChange={(e) => setBlinkLink(e.target.value)}
             id="link"
             placeholder="Enter Blink URL"
-            className="bg-secondary border border-border rounded-xl"
+            className={`bg-secondary border border-border rounded-xl ${
+              !isValidURL && "ring-2 ring-offset-2 ring-red-400"
+            }`}
+            onFocus={() => {
+              setIsValidURL(true);
+            }}
           />
         </div>
         <div className="flex flex-col space-y-1.5">
@@ -111,6 +130,5 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
         </Button>
       </div>
     </section>
-   
   );
 }
