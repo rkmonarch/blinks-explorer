@@ -1,15 +1,14 @@
-import React, { useState } from "react";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Button } from "../ui/button";
-import { useWallet } from "@solana/wallet-adapter-react";
-import MultipleSelector, { Option } from "../ui/multiple-selector";
-import useCreateBlinkStore from "@/store/create";
-import Spinner from "../Spinner";
 import useBlink from "@/hooks/useBlink";
 import useBlinks from "@/hooks/useBlinks";
+import useCreateBlinkStore from "@/store/create";
+import { useWallet } from "@solana/wallet-adapter-react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
-import prisma from "@/utils/prisma-client";
+import Spinner from "../Spinner";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import MultipleSelector from "../ui/multiple-selector";
 
 export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
   const { connected, publicKey } = useWallet();
@@ -62,7 +61,6 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
       }
       const isExits = await alreadyExists();
       if (isExits) {
-        setIsValidURL(false);
         setIsLoading(false);
         return;
       }
@@ -116,7 +114,8 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
             id="link"
             placeholder="Enter Blink URL"
             className={`bg-secondary border border-border rounded-xl ${
-              !isValidURL && "ring-2 ring-offset-2 ring-red-400"
+              !isValidURL ||
+              (!isNotExists && "ring-2 ring-offset-2 ring-red-400")
             }`}
             onFocus={() => {
               setIsValidURL(true);
