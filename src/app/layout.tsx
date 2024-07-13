@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     images: "https://onlyblinks.com/og.jpeg",
   },
   icons: {
-    icon: "https://onlyblinks.com//favicon.jpeg",
+    icon: "https://onlyblinks.com/favicon.jpeg",
   },
 };
 
