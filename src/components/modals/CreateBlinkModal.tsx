@@ -62,6 +62,7 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
       }
       const isExits = await alreadyExists();
       if (isExits) {
+        setIsValidURL(false);
         setIsLoading(false);
         return;
       }
