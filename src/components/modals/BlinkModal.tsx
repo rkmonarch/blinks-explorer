@@ -18,7 +18,7 @@ export default function BlinkModal({
   username: string;
 }) {
   return (
-    <section className="container mx-auto flex items-center overflow-auto">
+    <section className="md:container mx-auto flex items-center overflow-auto py-4 px-2">
       <div className="flex flex-col md:flex-row items-stretch justify-around w-full gap-4">
         <img
           src={blink.icon}
@@ -59,8 +59,8 @@ export default function BlinkModal({
               <Badge className="bg-white text-black py-1 px-3">Airdrop</Badge>
             </div> */}
           </div>
-          <div>
-            <div className="flex items-center gap-3 mb-4">
+          <div className="mt-4">
+            <div className="flex items-center gap-3 mb-4 flex-wrap md:flex-nowrap">
               {blink.links
                 ? blink.links.actions.map((action, index) => {
                     if (!action.parameters) {
