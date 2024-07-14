@@ -8,6 +8,7 @@ import { Transaction } from "@solana/web3.js";
 import { connection } from "@/utils/connection";
 import { Input } from "./ui/input";
 import Spinner from "./Spinner";
+import { toast } from "react-toastify";
 
 export default function RenderInputs({
   action,
@@ -29,8 +30,9 @@ export default function RenderInputs({
       let transaction = result.transaction;
       const tx = await getRawTransaction(transaction);
       const sign = await sendTransaction(tx as Transaction, connection);
+      toast.success("Transaction successfull");
     } catch (e) {
-      console.error(e);
+      toast.error("Failed to submit transaction");
     } finally {
       setIsLoading(false);
     }
@@ -60,8 +62,7 @@ export default function RenderInputs({
           });
           if (actionUrl.startsWith("http")) {
             handlePress(actionUrl);
-          }
-          else {
+          } else {
             handlePress("https://" + host + actionUrl);
           }
         }}

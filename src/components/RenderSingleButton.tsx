@@ -7,6 +7,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { getRawTransaction } from "@/utils/rawTransaction";
 import { Transaction } from "@solana/web3.js";
 import { connection } from "@/utils/connection";
+import { toast } from "react-toastify";
 
 export default function RenderSingleButton({
   blink,
@@ -27,7 +28,9 @@ export default function RenderSingleButton({
       let transaction = result.transaction;
       const tx = await getRawTransaction(transaction);
       const sign = await sendTransaction(tx as Transaction, connection);
+      toast.success("Transaction successfull");
     } catch (e) {
+      toast.error("Failed to submit transaction");
       console.error(e);
     } finally {
       setIsLoading(false);
