@@ -18,7 +18,7 @@ export default function BlinkModal({
   username: string;
 }) {
   return (
-    <section className="container mx-auto flex items-center">
+    <section className="container mx-auto flex items-center overflow-auto">
       <div className="flex flex-col md:flex-row items-stretch justify-around w-full gap-4">
         <img
           src={blink.icon}
