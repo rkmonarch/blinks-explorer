@@ -39,6 +39,7 @@ export default function Navbar() {
         body: JSON.stringify({
           address: publicKey,
           username: publicKey?.toBase58().trim().slice(0, 8),
+          avatar: `https://source.boringavatars.com/beam/120/${publicKey?.toBase58()}`,
         }),
       });
       const user = await createUser.json();

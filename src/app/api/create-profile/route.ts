@@ -2,7 +2,7 @@ import prisma from "@/utils/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-    const { username, address } = await req.json();
+    const { username, address, avatar } = await req.json();
 
     try {
         const existingUser = await prisma.user.findFirst({
@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
             data: {
                 username: username,
                 address: address,
+                avatar: avatar,
             },
         });
 
