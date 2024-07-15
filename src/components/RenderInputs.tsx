@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { Button } from "./ui/button";
-import { Action, Blink } from "@/types/blink";
-import useBlink from "@/hooks/useBlink";
-import { useWallet } from "@jup-ag/wallet-adapter";
-import { getRawTransaction } from "@/utils/rawTransaction";
-import { Transaction } from "@solana/web3.js";
-import { connection } from "@/utils/connection";
-import { Input } from "./ui/input";
-import Spinner from "./Spinner";
-import { toast } from "react-toastify";
+import React, { useState } from 'react';
+import { Button } from './ui/button';
+import { Action, Blink } from '@/types/blink';
+import useBlink from '@/hooks/useBlink';
+import { useWallet } from '@jup-ag/wallet-adapter';
+import { getRawTransaction } from '@/utils/rawTransaction';
+import { Transaction } from '@solana/web3.js';
+import { connection } from '@/utils/connection';
+import { Input } from './ui/input';
+import Spinner from './Spinner';
+import { toast } from 'react-toastify';
 
 export default function RenderInputs({
   action,
@@ -30,16 +30,16 @@ export default function RenderInputs({
       let transaction = result.transaction;
       const tx = await getRawTransaction(transaction);
       const sign = await sendTransaction(tx as Transaction, connection);
-      toast.success("Transaction successfull");
+      toast.success('Transaction successfull');
     } catch (e) {
-      toast.error("Failed to submit transaction");
+      toast.error('Failed to submit transaction');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col gap-3" key={""}>
+    <div className='flex flex-col gap-3' key={''}>
       {action?.parameters?.map((parameter) => (
         <Input
           placeholder={parameter.label}
@@ -50,6 +50,8 @@ export default function RenderInputs({
       <Button
         disabled={isLoading}
         key={action.label}
+        variant={'secondary'}
+        size={'lg'}
         onClick={async () => {
           let actionUrl = action.href;
           action?.parameters?.forEach((param) => {
@@ -60,10 +62,10 @@ export default function RenderInputs({
             ).value;
             actionUrl = actionUrl.replace(`{${param.name}}`, value);
           });
-          if (actionUrl.startsWith("http")) {
+          if (actionUrl.startsWith('http')) {
             handlePress(actionUrl);
           } else {
-            handlePress("https://" + host + actionUrl);
+            handlePress('https://' + host + actionUrl);
           }
         }}
       >
