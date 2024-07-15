@@ -1,13 +1,10 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import LinkIcon from "@/icons/LinkIcon";
-import BlinkModal from "../modals/BlinkModal";
 import useBlink from "@/hooks/useBlink";
+import useBlinkStore from "@/store/blinks";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import useBlinkStore from "@/store/blinks";
 
 export type BlinkCardProps = {
   blink: string;
@@ -43,7 +40,7 @@ export default function BlinkCard(props: BlinkCardProps) {
         }}
         src={blink?.icon}
         alt=""
-        className="w-full bg-white"
+        className="w-full bg-white rounded-lg cursor-pointer"
         style={{ width: "100%", height: "auto" }}
       />
 
