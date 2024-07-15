@@ -11,9 +11,9 @@ import { NextResponse } from "next/server";
 export const GET = async () => {
   const payload: ActionGetResponse = {
     icon: "https://onlyblinks.com/og.jpg",
-    description: `Onlyblinks is a blinks explorer only for blinks. Share you blinks directly from twitter through this blink.`,
-    title: `Share you Blink`,
-    label: "Share you Blink",
+    description: 'Onlyblinks is a dedicated blinks explorer, enabling you to share your blinks directly from Twitter.',
+    title: `Share your Blink`,
+    label: "Share",
     links: {
       actions: [
         {
@@ -21,8 +21,8 @@ export const GET = async () => {
           label: "Share you Blink",
           parameters: [
             {
-              name: "Your blink url",
-              label: "blink",
+              name: "Share",
+              label: "Blink URL",
             },
           ],
         },
