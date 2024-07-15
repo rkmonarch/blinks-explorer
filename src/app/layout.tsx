@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import ToastProvider from "@/components/providers/ToastProvider";
+import Layout from "@/components/layout";
 
 const SF_Pro_Rounded = localFont({
   src: [
@@ -52,7 +53,9 @@ export default function RootLayout({
     <Providers>
       <html lang="en">
         <body className={`${SF_Pro_Rounded.variable} ${inter.variable}`}>
-          <ToastProvider>{children}</ToastProvider>
+          <ToastProvider>
+            <Layout>{children}</Layout>
+          </ToastProvider>
         </body>
       </html>
     </Providers>
