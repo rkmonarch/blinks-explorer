@@ -15,7 +15,7 @@ export default function BlinkPage() {
   const { storeBlinks, currentBlink } = useBlinkStore();
   const route = useRouter();
   if (!currentBlink) {
-   return route.push("/");
+    return route.push("/");
   }
 
   return (
@@ -108,15 +108,17 @@ export default function BlinkPage() {
         </div>
       </div>
       <section className="columns-1 sm:columns-2 md:columns-2 lg:columns-3 xl:columns-4 2xl:columns-5 my-10 gap-6 px-4">
-        {storeBlinks.map((blinkItem: Blink) => (
-        <BlinkCard
-          blink={blinkItem.blink}
-          website={new URL(blinkItem.blink).hostname}
-          username={blinkItem.User.username}
-          avatar={blinkItem.User.avatar}
-          key={blinkItem.blink}
-        />
-      ))}
+        {storeBlinks.map((blinkItem: Blink) =>
+          currentBlink.website === blinkItem.blink ? null : (
+            <BlinkCard
+              blink={blinkItem.blink}
+              website={new URL(blinkItem.blink).hostname}
+              username={blinkItem.User.username}
+              avatar={blinkItem.User.avatar}
+              key={blinkItem.blink}
+            />
+          )
+        )}
       </section>
     </section>
   );
