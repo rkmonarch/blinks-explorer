@@ -18,7 +18,7 @@ export default function Filter() {
         <Button
           variant={'secondary'}
           className={`font-sf_pro_rounded px-4 py-[6px] font-medium ${
-            !selectedTag ? 'bg-gray-100 text-black' : ''
+            !selectedTag ? 'bg-gray-100 bg-opacity-85 text-black' : ''
           }`}
           onClick={() => setSelectedTag('')}
         >
@@ -32,7 +32,7 @@ export default function Filter() {
             key={tag}
             onClick={() => setSelectedTag(tag)}
             className={`opacity-80 font-sf_pro_rounded px-4 py-[6px] font-medium ${
-              selectedTag === tag ? 'bg-gray-100 text-black' : ''
+              selectedTag === tag ? 'bg-gray-100 bg-opacity-85 text-black' : ''
             }`}
             variant={'ghost'}
           >
