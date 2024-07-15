@@ -39,9 +39,6 @@ export const metadata: Metadata = {
   openGraph: {
     images: "https://onlyblinks.com/og.jpeg",
   },
-  icons: {
-    icon: "https://onlyblinks.com/favicon.jpeg",
-  },
 };
 
 export default function RootLayout({

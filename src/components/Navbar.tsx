@@ -1,14 +1,14 @@
 "use client";
 
-import useUserStore from '@/store/user';
-import { useWallet } from '@solana/wallet-adapter-react';
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
-import ConnectButton from './ConnectButton';
-import CreateBlinkModal from './modals/CreateBlinkModal';
-import { Button } from './ui/button';
-import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
-import LogoAnimation from './Logo';
+import useUserStore from "@/store/user";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import ConnectButton from "./ConnectButton";
+import CreateBlinkModal from "./modals/CreateBlinkModal";
+import { Button } from "./ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import LogoAnimation from "./Logo";
 
 export default function Navbar() {
   const { connected, publicKey } = useWallet();
@@ -60,9 +60,9 @@ export default function Navbar() {
   });
 
   return (
-    <nav className='flex items-center justify-between px-6 py-[14px] border-b-[0.8px] border-black border-opacity-10'>
+    <nav className="flex items-center justify-between px-6 py-[14px] border-b-[0.8px] border-black border-opacity-10">
       {/* <Image src='/logo.svg' alt='Logo' width={128} height={42} /> */}
-      <div className='hidden w-auto h-[36px]'>
+      <div className="hidden w-auto h-[36px]">
         <svg
           width="auto"
           height="auto"
@@ -79,7 +79,7 @@ export default function Navbar() {
         </svg>
       </div>
       <LogoAnimation />
-      <div className='hidden md:flex items-center bg-gray-100 py-2 px-4 w-full max-w-[32rem] space-x-3 rounded-lg'>
+      <div className="hidden md:flex items-center bg-gray-100 py-2 px-4 w-full max-w-[32rem] space-x-3 rounded-lg">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-[18px] w-[18px] opacity-30"
@@ -109,9 +109,7 @@ export default function Navbar() {
                 setIsOpen(true);
               }}
             >
-              <Button className=" font-sf_pro_rounded font-medium px-5 py-2">
-                Register Blink
-              </Button>
+              <ConnectButton />
             </DialogTrigger>
             <DialogContent className="max-w-sm rounded-lg">
               <CreateBlinkModal
