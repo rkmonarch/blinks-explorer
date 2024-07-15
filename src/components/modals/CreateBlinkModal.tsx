@@ -1,7 +1,7 @@
 import useBlink from "@/hooks/useBlink";
 import useBlinks from "@/hooks/useBlinks";
 import useCreateBlinkStore from "@/store/create";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@jup-ag/wallet-adapter";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import Spinner from "../Spinner";
