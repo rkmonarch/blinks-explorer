@@ -83,18 +83,19 @@ export const POST = async (req: Request) => {
     }
   }
 
-  async function alreadyExists() {
+  async function alreadyExists(blinkURL: string) {
     try {
-      const res = await fetch(
-        `https://www.onlyblinks.com/api/already-exists?link=${req.url}`
-      );
-      const data = await res.json();
-      if (data) {
+      const res = await prisma.blink.findFirst({
+        where: {
+          blink: blinkURL as string,
+        },
+      });
+      if (res) {
         return true;
       }
       return false;
     } catch (error) {
-      console.log(error);
+      return true;
     }
   }
 
@@ -136,9 +137,9 @@ export const POST = async (req: Request) => {
 
     const invalidBlink = isValidURL(blink as string);
 
-    const exists = await alreadyExists();
+    const exists = await alreadyExists(blink as string);
 
-    if (!invalidBlink) {
+    if (invalidBlink === true) {
       return NextResponse.json(
         { message: "Invalid URL" },
         {
@@ -151,14 +152,14 @@ export const POST = async (req: Request) => {
       return NextResponse.json(
         { message: "Blink already exists" },
         {
-          status: 200,
+          status: 400,
         }
       );
     }
 
     const isValid = await handleValidation();
 
-    if (!isValid) {
+    if (isValid === false) {
       return NextResponse.json(
         { message: "Invalid Blink URL" },
         {
