@@ -4,6 +4,7 @@ import useBlinks from '@/hooks/useBlinks';
 import useBlinkStore from '@/store/blinks';
 import BlinkCard from './cards/BlinkCard';
 import BlinksSkeleton from './skeletons/BlinksSkeleton';
+import LogoAnimation from './Logo';
 
 export default function Blinks() {
   const { storeBlinks } = useBlinkStore();
@@ -15,8 +16,11 @@ export default function Blinks() {
 
   if (storeBlinks.length === 0) {
     return (
-      <div className='h-96 w-full flex items-center justify-center'>
-        <p className='text-gray-500 font-semibold text-sm'>Blinks not found</p>
+      <div className='h-[60vh] flex flex-col items-center gap-2 justify-center w-full border border-black border-opacity-[8%] rounded-xl'>
+        <LogoAnimation />
+        <p className='text-gray-500 font-regular text-xl'>
+          Oops... blink again!
+        </p>
       </div>
     );
   }
