@@ -81,4 +81,17 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+
+  .connect {
+    border-radius: 10;
+    border: 2px solid #250ef2 !important;
+    font-weight: 400 !important;
+    font-size: 14;
+    padding-left: 16;
+    padding-right: 16;
+    padding-top: 6;
+    padding-bottom: 6;
+    color: white !important;
+    background-color: #250ef2 !important;
+  }
 }
