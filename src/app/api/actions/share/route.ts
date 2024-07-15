@@ -86,7 +86,7 @@ export const POST = async (req: Request) => {
   async function alreadyExists() {
     try {
       const res = await fetch(
-        `www.onlyblinks.com/api/already-exists?link=${req.url}`
+        `https://www.onlyblinks.com/api/already-exists?link=${req.url}`
       );
       const data = await res.json();
       if (data) {
