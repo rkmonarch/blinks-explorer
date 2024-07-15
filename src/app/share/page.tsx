@@ -1,16 +1,17 @@
+'use client';
 import useBlink from '@/hooks/useBlink';
 import useBlinks from '@/hooks/useBlinks';
 import useCreateBlinkStore from '@/store/create';
 import { useWallet } from '@jup-ag/wallet-adapter';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import Spinner from '../Spinner';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import MultipleSelector from '../ui/multiple-selector';
+import Spinner from '../../components/Spinner';
+import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
+import { Label } from '../../components/ui/label';
+import MultipleSelector from '../../components/ui/multiple-selector';
 
-export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
+export default function BlinkPage() {
   const { connected, publicKey } = useWallet();
   const [isValidURL, setIsValidURL] = useState(true);
   const [isNotExists, setIsNotExists] = useState(true);
@@ -105,63 +106,70 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
   ];
 
   return (
-    <section>
-      <h4 className='font-semibold text-2xl text-center font-sf_pro_rounded'>
-        Share your Blink
-      </h4>
-      <div className='flex flex-col gap-4 mt-6'>
-        <div className='flex flex-col space-y-1.5'>
-          <Label htmlFor='link' className='text-sm font-medium mb-1'>
-            Blink URL
-          </Label>
-          <Input
-            onChange={(e) => setBlinkLink(e.target.value)}
-            id='link'
-            placeholder='Enter Blink URL'
-            className={`bg-secondary border border-border rounded-xl ${
-              !isValidURL || !isNotExists
-                ? 'ring-2 ring-offset-2 ring-red-400'
-                : ''
-            }`}
-            onFocus={() => {
-              setIsValidURL(true);
-              setIsNotExists(true);
-            }}
-          />
-          {!isValidURL && (
-            <p className='text-xs text-red-500'>Please enter valid blink</p>
-          )}
-          {!isNotExists && (
-            <p className='text-xs text-red-500'>Blink already exists</p>
-          )}
+    <section className='mx-auto items-center w-full'>
+      <div className='w-full flex flex-col max-w-xl mx-auto items-center justify-center py-20'>
+        <h4 className='font-semibold text-3xl text-center font-sf_pro_rounded'>
+          Share your Blink with everyone
+        </h4>
+        <div className='flex flex-col w-full gap-4 mt-12 px-12'>
+          <div className='flex flex-col space-y-1.5'>
+            <div className='flex flex-row items-center justify-between'>
+              <Label htmlFor='link' className='text-lg font-medium mb-1'>
+                Blink URL
+              </Label>
+              <p className='text-sm text-gray-500'>Not Validated</p>
+            </div>
+            <Input
+              onChange={(e) => setBlinkLink(e.target.value)}
+              id='link'
+              placeholder='Enter Blink URL'
+              className={`bg-secondary h-12 border border-border rounded-xl ${
+                !isValidURL || !isNotExists
+                  ? 'ring-2 ring-offset-2 ring-red-400'
+                  : ''
+              }`}
+              onFocus={() => {
+                setIsValidURL(true);
+                setIsNotExists(true);
+              }}
+            />
+            {!isValidURL && (
+              <p className='text-xs text-red-500'>Please enter valid blink</p>
+            )}
+            {!isNotExists && (
+              <p className='text-xs text-red-500'>Blink already exists</p>
+            )}
+          </div>
+          <div className='flex flex-col space-y-1.5'>
+            <Label htmlFor='link' className='text-lg font-medium mb-1'>
+              Tags
+            </Label>
+            <MultipleSelector
+              badgeClassName='bg-white text-black hover:bg-white'
+              className='bg-secondary flex  justify-start items-center h-12 border border-border rounded-xl'
+              defaultOptions={Tags}
+              placeholder='Select suitable tags'
+              emptyIndicator={
+                <p className='text-center text-sm text-gray-600 dark:text-gray-400'>
+                  No more tags
+                </p>
+              }
+              onChange={(options) => setSelectedTags(options)}
+            />
+          </div>
+          <div className='pt-6 w-full'>
+            <Button
+              disabled={isLoading}
+              onClick={(e) => {
+                e.preventDefault();
+                createBlink();
+              }}
+              className='w-full rounded-xl'
+            >
+              {isLoading ? <Spinner /> : 'Share'}
+            </Button>
+          </div>
         </div>
-        <div className='flex flex-col space-y-1.5'>
-          <Label htmlFor='link' className='text-sm font-medium mb-1'>
-            Tags
-          </Label>
-          <MultipleSelector
-            badgeClassName='bg-white text-black hover:bg-white'
-            className='bg-secondary border border-border rounded-xl'
-            defaultOptions={Tags}
-            placeholder='Select suitable tags'
-            emptyIndicator={
-              <p className='text-center text-sm text-gray-600 dark:text-gray-400'>
-                No more tags
-              </p>
-            }
-            onChange={(options) => setSelectedTags(options)}
-          />
-        </div>
-        <Button
-          disabled={isLoading}
-          onClick={(e) => {
-            e.preventDefault();
-            createBlink();
-          }}
-          className='w-full rounded-xl'
-        >
-          {isLoading ? <Spinner /> : 'Share'}
-        </Button>
       </div>
     </section>
   );
