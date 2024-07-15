@@ -3,7 +3,7 @@ import prisma from "@/utils/prisma-client";
 import {
   ACTIONS_CORS_HEADERS,
   ActionGetResponse,
-  ActionPostRequest
+  ActionPostRequest,
 } from "@solana/actions";
 import { PublicKey } from "@solana/web3.js";
 import { NextResponse } from "next/server";
@@ -11,7 +11,8 @@ import { NextResponse } from "next/server";
 export const GET = async () => {
   const payload: ActionGetResponse = {
     icon: "https://onlyblinks.com/og.jpg",
-    description: 'Onlyblinks is a dedicated blinks explorer, enabling you to share your blinks directly from Twitter.',
+    description:
+      "Onlyblinks is a dedicated blinks explorer, enabling you to share your blinks directly from Twitter.",
     title: `Share your Blink`,
     label: "Share",
     links: {
@@ -54,19 +55,22 @@ export const POST = async (req: Request) => {
   }
 
   try {
-    const invalidTags = tag?.split(",").filter((tag: string) => !Tags.includes(tag));
-    if (invalidTags!.length > 0) {
-      return NextResponse.json({ message: `Tags should be from the list: ${Tags.join(', ')}` }, {
-        status: 400
-      });
-    }
+    // const invalidTags = tag?.split(",").filter((tag: string) => !Tags.includes(tag));
+    // if (invalidTags!.length > 0) {
+    //   return NextResponse.json({ message: `Tags should be from the list: ${Tags.join(', ')}` }, {
+    //     status: 400
+    //   });
+    // }
 
     const invalidBlink = isValidURL(blink as string);
 
     if (!invalidBlink) {
-      return NextResponse.json({ message: "Invalid URL" }, {
-        status: 400
-      });
+      return NextResponse.json(
+        { message: "Invalid URL" },
+        {
+          status: 400,
+        }
+      );
     }
 
     const existingUser = await prisma.user.findFirst({
@@ -81,9 +85,11 @@ export const POST = async (req: Request) => {
           rank: 1000,
           blink: blink as string,
           Tags: {
-            create: tag?.split(",").map((tag: string) => ({
-              tag: "",
-            })),
+            create: [
+              {
+                tag: "Social",
+              },
+            ],
           },
           User: {
             connect: {
@@ -105,9 +111,11 @@ export const POST = async (req: Request) => {
             rank: 1000,
             blink: blink as string,
             Tags: {
-              create: tag?.split(",").map((tag: string) => ({
-                tag: "",
-              })),
+              create: [
+                {
+                  tag: "Social",
+                },
+              ],
             },
             User: {
               connect: {
@@ -116,20 +124,26 @@ export const POST = async (req: Request) => {
             },
           },
         });
-        return new Response(JSON.stringify({
-          message: "Blink registered successfully!"
-        }), {
-          status: 200,
-          headers: ACTIONS_CORS_HEADERS,
-        });
+        return new Response(
+          JSON.stringify({
+            message: "Blink registered successfully!",
+          }),
+          {
+            status: 200,
+            headers: ACTIONS_CORS_HEADERS,
+          }
+        );
       }
     }
-    return new Response(JSON.stringify({
-      message: "Blink registered successfully!"
-    }), {
-      status: 200,
-      headers: ACTIONS_CORS_HEADERS,
-    });
+    return new Response(
+      JSON.stringify({
+        message: "Blink registered successfully!",
+      }),
+      {
+        status: 200,
+        headers: ACTIONS_CORS_HEADERS,
+      }
+    );
   } catch (error) {
     console.log(error);
     return new Response("Internal server error", {
