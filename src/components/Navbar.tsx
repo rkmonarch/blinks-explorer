@@ -64,7 +64,7 @@ export default function Navbar() {
   return (
     <nav className='flex items-center justify-between py-3 border-b-[0.5px] border-black border-opacity-10'>
       {/* <Image src='/logo.svg' alt='Logo' width={128} height={42} /> */}
-      <div className='w-auto h-10'>
+      <div className='w-auto h-[36px]'>
         <svg
           width='auto'
           height='auto'

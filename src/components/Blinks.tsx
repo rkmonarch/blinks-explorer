@@ -4,29 +4,26 @@ import useBlinks from '@/hooks/useBlinks';
 import useBlinkStore from '@/store/blinks';
 import BlinkCard from './cards/BlinkCard';
 import BlinksSkeleton from './skeletons/BlinksSkeleton';
-import blinksData from './blinks.json';
 
 export default function Blinks() {
   const { storeBlinks } = useBlinkStore();
   const { isLoading, isError } = useBlinks();
 
-  // if (isError) return;
+  if (isError) return;
 
-  // if (isLoading) return <BlinksSkeleton />;
+  if (isLoading) return <BlinksSkeleton />;
 
-  // if (storeBlinks.length === 0) {
-  //   return (
-  //     <div className='h-96 w-full flex items-center justify-center'>
-  //       <p className='text-gray-500 font-semibold text-sm'>Blinks not found</p>
-  //     </div>
-  //   );
-  // }
-
-  //console.log('blinks data - ', storeBlinks);
+  if (storeBlinks.length === 0) {
+    return (
+      <div className='h-96 w-full flex items-center justify-center'>
+        <p className='text-gray-500 font-semibold text-sm'>Blinks not found</p>
+      </div>
+    );
+  }
 
   return (
-    <section className='columns-1 sm:columns-2 lg:columns-3 2xl:columns-4 mb-10 gap-6'>
-      {blinksData.map((blink: Blink) => (
+    <section className='columns-1 sm:columns-2 md:columns-2 lg:columns-3 xl:columns-4 2xl:columns-5 mb-10 gap-6'>
+      {storeBlinks.map((blink: Blink) => (
         <BlinkCard
           blink={blink.blink}
           website={new URL(blink.blink).hostname}
