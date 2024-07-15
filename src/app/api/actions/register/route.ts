@@ -10,7 +10,7 @@ import { NextResponse } from "next/server";
 
 export const GET = async () => {
   const payload: ActionGetResponse = {
-    icon: "https://static.vecteezy.com/system/resources/previews/035/808/957/non_2x/3d-round-arrow-with-golden-coins-in-wallet-render-cashback-or-return-money-in-shopping-concept-of-payment-with-money-back-refund-and-digital-payment-return-of-investment-illustration-vector.jpg",
+    icon: "https://onlyblinks.com/og.jpg",
     description: `Register your blink for the Only Blinks`,
     title: `Register Blink`,
     label: "Register Blink",
