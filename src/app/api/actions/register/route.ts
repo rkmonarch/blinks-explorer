@@ -11,22 +11,18 @@ import { NextResponse } from "next/server";
 export const GET = async () => {
   const payload: ActionGetResponse = {
     icon: "https://onlyblinks.com/og.jpg",
-    description: `Register your blink for the Only Blinks`,
-    title: `Register Blink`,
-    label: "Register Blink",
+    description: `Onlyblinks is a blinks explorer only for blinks. Share you blinks directly from twitter through this blink.`,
+    title: `Share you Blink`,
+    label: "Share you Blink",
     links: {
       actions: [
         {
           href: "/api/actions/register?blink={blink}&tag={tag}",
-          label: "Register Blink",
+          label: "Share you Blink",
           parameters: [
             {
-              name: "blink",
+              name: "Your blink url",
               label: "blink",
-            },
-            {
-              name: "tag",
-              label: "tag",
             },
           ],
         },
@@ -86,7 +82,7 @@ export const POST = async (req: Request) => {
           blink: blink as string,
           Tags: {
             create: tag?.split(",").map((tag: string) => ({
-              tag: tag,
+              tag: "",
             })),
           },
           User: {
@@ -110,7 +106,7 @@ export const POST = async (req: Request) => {
             blink: blink as string,
             Tags: {
               create: tag?.split(",").map((tag: string) => ({
-                tag: tag,
+                tag: "",
               })),
             },
             User: {
