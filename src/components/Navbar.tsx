@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 import LogoAnimation from './Logo';
 import Link from 'next/link';
 
+
 export default function Navbar() {
   const { connected, publicKey } = useWallet();
   const { avatar, setUsername, setAvatar, setFirstName, setLastName, setBio } =
@@ -61,9 +62,9 @@ export default function Navbar() {
   });
 
   return (
-    <nav className='flex items-center justify-between px-6 py-[14px] border-b-[0.8px] border-black border-opacity-10'>
+    <nav className="flex items-center justify-between px-6 py-[14px] border-b-[0.8px] border-black border-opacity-10">
       {/* <Image src='/logo.svg' alt='Logo' width={128} height={42} /> */}
-      <div className='hidden w-auto h-[36px]'>
+      <div className="hidden w-auto h-[36px]">
         <svg
           width='auto'
           height='auto'
@@ -115,6 +116,7 @@ export default function Navbar() {
               <Button className=' font-sf_pro_rounded font-medium px-5 py-2'>
                 Register Blink
               </Button>
+              <ConnectButton />
             </DialogTrigger>
             <DialogContent className='max-w-sm rounded-lg'>
               <CreateBlinkModal
