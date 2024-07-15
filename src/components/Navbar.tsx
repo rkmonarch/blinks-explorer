@@ -3,14 +3,11 @@
 import useUserStore from "@/store/user";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import ConnectButton from "./ConnectButton";
-import CreateBlinkModal from "./modals/CreateBlinkModal";
-import { Button } from "./ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
-import LogoAnimation from "./Logo";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ConnectButton from "./ConnectButton";
+import LogoAnimation from "./Logo";
+import { Button } from "./ui/button";
 
 export default function Navbar() {
   const { connected, publicKey } = useWallet();

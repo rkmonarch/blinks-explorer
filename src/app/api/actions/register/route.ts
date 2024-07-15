@@ -82,6 +82,7 @@ export const POST = async (req: Request) => {
     if (existingUser) {
       const blinkResponse = await prisma.blink.create({
         data: {
+          rank: 1000,
           blink: blink as string,
           Tags: {
             create: tag?.split(",").map((tag: string) => ({
@@ -105,6 +106,7 @@ export const POST = async (req: Request) => {
       if (user) {
         const blinkResponse = await prisma.blink.create({
           data: {
+            rank: 1000,
             blink: blink as string,
             Tags: {
               create: tag?.split(",").map((tag: string) => ({
