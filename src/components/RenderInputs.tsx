@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { Action, Blink } from "@/types/blink";
 import useBlink from "@/hooks/useBlink";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@jup-ag/wallet-adapter";
 import { getRawTransaction } from "@/utils/rawTransaction";
 import { Transaction } from "@solana/web3.js";
 import { connection } from "@/utils/connection";
