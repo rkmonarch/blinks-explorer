@@ -1,13 +1,13 @@
-import useBlink from '@/hooks/useBlink';
-import { Action } from '@/types/blink';
-import { connection } from '@/utils/connection';
-import { getRawTransaction } from '@/utils/rawTransaction';
-import { useWallet } from '@jup-ag/wallet-adapter';
-import { Transaction } from '@solana/web3.js';
-import React, { useState } from 'react';
-import { Button } from './ui/button';
-import Spinner from './Spinner';
-import { toast } from 'react-toastify';
+import useBlink from "@/hooks/useBlink";
+import { Action } from "@/types/blink";
+import { connection } from "@/utils/connection";
+import { getRawTransaction } from "@/utils/rawTransaction";
+import { useWallet } from "@jup-ag/wallet-adapter";
+import { Transaction } from "@solana/web3.js";
+import React, { useState } from "react";
+import { Button } from "./ui/button";
+import Spinner from "./Spinner";
+import { toast } from "react-toastify";
 
 export default function RenderMultipleButtons({
   action,
@@ -33,40 +33,38 @@ export default function RenderMultipleButtons({
       let transaction = result.transaction;
       const tx = await getRawTransaction(transaction);
       const sign = await sendTransaction(tx as Transaction, connection);
-      toast.success('Transaction successfull');
+      toast.success("Transaction successfull");
     } catch (e) {
-      toast.error('Failed to submit transaction');
+      toast.error("Failed to submit transaction");
     } finally {
       setIsLoading(false);
     }
   };
 
   const getButtonClass = () => {
-    if (
-      count === 1 ||
-      (count % 3 !== 0 && index >= Math.floor(count / 3) * 3)
-    ) {
-      return 'w-full';
-    } else if (count % 3 === 0 && index >= Math.floor(count / 3) * 3) {
-      return 'w-1/3';
-    } else {
-      return 'w-1/3';
+    console.log(count, count % 2 === 0);
+    if (count % 2 === 0) {
+      return "w-1/2";
+    } else if (count % 3 === 0) {
+      return "w-1/3";
     }
   };
 
   return (
-    <Button
-      disabled={isLoading}
-      key={action.label}
-      onClick={async () => {
-        let actionUrl = action.href;
-        handlePress('https://' + host + actionUrl);
-      }}
-      className={getButtonClass()}
-      variant={'secondary'}
-      size={'lg'}
-    >
-      {isLoading ? <Spinner /> : action.label}
-    </Button>
+    <div className={`${getButtonClass()} p-2`}>
+      <Button
+        disabled={isLoading}
+        key={action.label}
+        onClick={async () => {
+          let actionUrl = action.href;
+          handlePress("https://" + host + actionUrl);
+        }}
+        variant={"secondary"}
+        className="w-full"
+        size={"lg"}
+      >
+        {isLoading ? <Spinner /> : action.label}
+      </Button>
+    </div>
   );
 }
