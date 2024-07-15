@@ -112,7 +112,7 @@ export default function Navbar() {
                 setIsOpen(true);
               }}
             >
-              <ConnectButton />
+              <Button>Register Blink</Button>
             </DialogTrigger>
             <DialogContent className="max-w-sm rounded-lg">
               <CreateBlinkModal

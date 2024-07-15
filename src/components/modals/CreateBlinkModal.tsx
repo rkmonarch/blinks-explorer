@@ -86,49 +86,23 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
     }
   }
 
-  // const Tags = [
-  //   { label: "Nfts", value: "NFTs" },
-  //   { label: "Defi", value: "DEFI" },
-  //   { label: "Infrastructure", value: "INFRASTRUCTURE" },
-  //   { label: "Swap", value: "SWAP" },
-  //   { label: "Airdrop", value: "AIRDROP" },
-  //   { label: "Social", value: "SOCIAL" },
-  //   { label: "Staking", value: "STAKING" },
-  //   { label: "Trading", value: "TRADING" },
-  //   { label: "Games", value: "GAMES" },
-  //   { label: "Voting", value: "VOTING" },
-  //   { label: "Dao", value: "DAO" },
-  //   { label: "Memes", value: "MEMES" },
-  // ];
   const Tags = [
-    { label: "DEXs", value: "DEXs" },
-    { label: "Perps", value: "Perps" },
-    { label: "Lending", value: "Lending" },
-    { label: "Yield", value: "Yield" },
-    { label: "Liquid Staking", value: "Liquid Staking" },
-    { label: "Stables", value: "Stables" },
-    { label: "RWAs", value: "RWAs" },
-    { label: "DEX Aggs", value: "DEX Aggs" },
-    { label: "CEXs", value: "CEXs" },
-    { label: "Restaking", value: "Restaking" },
-    { label: "Memecoins", value: "Memecoins" },
-    { label: "NFTs", value: "NFTs" },
-    { label: "Gaming", value: "Gaming" },
-    { label: "Creator Platforms", value: "Creator Platforms" },
-    { label: "Blinks", value: "Blinks" },
-    { label: "DePIN", value: "DePIN" },
-    { label: "Community", value: "Community" },
-    { label: "Payments", value: "Payments" },
-    { label: "Wallets", value: "Wallets" },
-    { label: "InterOp", value: "InterOp" },
-    { label: "Dev Tooling", value: "Dev Tooling" },
-    { label: "Oracles", value: "Oracles" },
-    { label: "Nodes", value: "Nodes" },
-    { label: "Scaling", value: "Scaling" },
-    { label: "Compute", value: "Compute" },
-    { label: "Analytics", value: "Analytics" }
-];
-
+    { label: "NFTs", value: "nfts" },
+    { label: "DEFI", value: "defi" },
+    { label: "DAO", value: "dao" },
+    { label: "Tokens", value: "tokens" },
+    { label: "Social", value: "social" },
+    { label: "Prediction Market", value: "prediction_market" },
+    { label: "Swap", value: "swap" },
+    { label: "Donations", value: "donations" },
+    { label: "Trade", value: "trade" },
+    { label: "Airdrop", value: "airdrop" },
+    { label: "Votes", value: "votes" },
+    { label: "Memes", value: "memes" },
+    { label: "Staking", value: "staking" },
+    { label: "Token gated", value: "token_gated" },
+    { label: "Games", value: "games" },
+  ];
 
   return (
     <section>
