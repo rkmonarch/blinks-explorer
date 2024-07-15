@@ -17,7 +17,7 @@ export const GET = async () => {
     links: {
       actions: [
         {
-          href: "/api/actions/register?blink={blink}&tag={tag}",
+          href: "/api/actions/share?blink={blink}&tag={tag}",
           label: "Share",
           parameters: [
             {
