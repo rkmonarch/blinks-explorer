@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
             const blinkResponse = await prisma.blink.create({
                 data: {
                     blink: blink,
+                    rank: 1000,
                     Tags: {
                         create: tags.map((tag: string) => ({
                             tag: tag,

@@ -25,6 +25,7 @@ model Blink {
   blink     String
   address   String
   createdAt DateTime @default(now()) @db.Timestamptz(6)
+  rank      Int
   Tags      Tags[]
   User      User     @relation(fields: [address], references: [address], onDelete: NoAction, onUpdate: NoAction)
 }

@@ -10,12 +10,13 @@ import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import LogoAnimation from "./Logo";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const { connected, publicKey } = useWallet();
   const { avatar, setUsername, setAvatar, setFirstName, setLastName, setBio } =
     useUserStore();
-  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   async function getOrCreateUser() {
     const getUser = await fetch(`/api/get-profile?address=${publicKey}`, {
@@ -103,42 +104,17 @@ export default function Navbar() {
           placeholder="Search Blinks..."
         />
       </div>
-      {connected && user ? (
-        <div className="flex items-center gap-2">
-          <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger
-              asChild
-              onClick={() => {
-                setIsOpen(true);
-              }}
-            >
-              <Button>Register Blink</Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-sm rounded-lg">
-              <CreateBlinkModal
-                onClick={() => {
-                  setIsOpen(false);
-                }}
-              />
-            </DialogContent>
-          </Dialog>
-          <Dialog>
-            {/* <DialogTrigger> */}
-            {/* <Avatar className="w-9 h-9">
-              <AvatarImage
-                src={avatar ? avatar : "https://github.com/shadcn.png"}
-              />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar> */}
-            {/* <DialogContent className="max-w-sm rounded-lg"> */}
-            {/* <UserProfileModal /> */}
-            {/* </DialogContent> */}
-            {/* </DialogTrigger> */}
-          </Dialog>
-        </div>
-      ) : (
+      <div className="flex items-center gap-2">
+        <Button
+          variant={"link"}
+          onClick={() => {
+            router.push("/share");
+          }}
+        >
+          Share Blink
+        </Button>
         <ConnectButton />
-      )}
+      </div>
     </nav>
   );
 }
