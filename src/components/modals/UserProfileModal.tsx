@@ -39,17 +39,17 @@ export default function UserProfileModal() {
     <section>
       <h4 className="font-semibold text-2xl text-center">Update Profile</h4>
       <Upload
-            id="image"
-            name="image"
-            type="file"
-            label="Upload Product"
-            onChange={(e) => {
-                e.preventDefault();
-              if (e.target.files && e.target.files.length > 0) {
-                uploadProductImage(e.target.files[0]);
-              }
-            }}
-          />
+        id="image"
+        name="image"
+        type="file"
+        label="Upload Product"
+        onChange={(e) => {
+          e.preventDefault();
+          if (e.target.files && e.target.files.length > 0) {
+            uploadProductImage(e.target.files[0]);
+          }
+        }}
+      />
       <div className="flex flex-col gap-4 mt-6">
         <div className="flex flex-col space-y-1.5">
           <Label htmlFor="link" className="text-sm font-medium mb-1">

@@ -46,10 +46,8 @@ export default function BlinkCard(props: BlinkCardProps) {
         }}
         src={blink?.icon}
         alt=""
-        className="w-full  border border-black border-opacity-10 bg-white rounded-xl cursor-pointer"
-        style={{ width: "100%", height: "auto" }}
+        className="w-full border border-black border-opacity-10 bg-white rounded-xl cursor-pointer"
       />
-
       <div className="flex items-center justify-between mt-1">
         <div className="flex items-center gap-2">
           <Avatar className="w-4 h-4 sm:w-6 sm:h-6">
