@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@dialectlabs/blinks": "^0.4.7",
     "@jup-ag/wallet-adapter": "^0.2.0",
     "@pinata/sdk": "^2.1.0",
     "@prisma/client": "^5.16.2",

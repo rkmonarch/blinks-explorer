@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@dialectlabs/blinks':
+    specifier: ^0.4.7
+    version: 0.4.7(@solana/wallet-adapter-react-ui@0.9.35)(@solana/wallet-adapter-react@0.15.35)(@solana/web3.js@1.95.0)(react-dom@18.3.1)(react@18.3.1)
   '@jup-ag/wallet-adapter':
     specifier: ^0.2.0
     version: 0.2.0(@emotion/react@11.11.4)(@emotion/styled@11.11.5)(@solana/spl-token@0.3.11)(@solana/web3.js@1.95.0)(bs58@4.0.1)(decimal.js@10.4.3)(react-dom@18.3.1)(react-native@0.74.3)(react@18.3.1)(styled-components@6.1.11)
@@ -1663,6 +1666,23 @@ packages:
       '@babel/helper-string-parser': 7.24.7
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
+    dev: false
+
+  /@dialectlabs/blinks@0.4.7(@solana/wallet-adapter-react-ui@0.9.35)(@solana/wallet-adapter-react@0.15.35)(@solana/web3.js@1.95.0)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-etum0eSysqOsfFYuZLVAAC07+qQTylJYsTTb1dRVrCiDWCer2PRCwKtCdYyhTg1RhmbNnKO4Wgu6nuZrG1xVhg==}
+    peerDependencies:
+      '@solana/wallet-adapter-react': ^0.15.0
+      '@solana/wallet-adapter-react-ui': ^0.9.0
+      '@solana/web3.js': ^1.91.0
+      react: '>=18'
+      react-dom: '>=18'
+    dependencies:
+      '@solana/wallet-adapter-react': 0.15.35(@solana/web3.js@1.95.0)(bs58@4.0.1)(react-native@0.74.3)(react@18.3.1)
+      '@solana/wallet-adapter-react-ui': 0.9.35(@solana/web3.js@1.95.0)(bs58@4.0.1)(react-dom@18.3.1)(react-native@0.74.3)(react@18.3.1)
+      '@solana/web3.js': 1.95.0
+      clsx: 2.1.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
     dev: false
 
   /@emotion/babel-plugin@11.11.0:

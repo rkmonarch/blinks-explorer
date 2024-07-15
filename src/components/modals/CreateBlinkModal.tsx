@@ -1,14 +1,14 @@
-import useBlink from '@/hooks/useBlink';
-import useBlinks from '@/hooks/useBlinks';
-import useCreateBlinkStore from '@/store/create';
-import { useWallet } from '@jup-ag/wallet-adapter';
-import React, { useState } from 'react';
-import { toast } from 'react-toastify';
-import Spinner from '../Spinner';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import MultipleSelector from '../ui/multiple-selector';
+import useBlink from "@/hooks/useBlink";
+import useBlinks from "@/hooks/useBlinks";
+import useCreateBlinkStore from "@/store/create";
+import { useWallet } from "@jup-ag/wallet-adapter";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import Spinner from "../Spinner";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import MultipleSelector from "../ui/multiple-selector";
 
 export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
   const { connected, publicKey } = useWallet();
@@ -20,20 +20,20 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
   const { refetch } = useBlinks();
   const { fetchBlink } = useBlink();
 
-  async function handleValidation() {
-    try {
-      const isValid = await fetchBlink(blinkLink);
-      if (!isValid) {
-        setIsValidURL(false);
-        setIsLoading(false);
-        return false;
-      }
-      return true;
-    } catch (error) {
-      setIsValidURL(false);
-      console.log(error);
-    }
-  }
+  // async function handleValidation() {
+  //   try {
+  //     const isValid = await fetchBlink(blinkLink);
+  //     if (!isValid) {
+  //       setIsValidURL(false);
+  //       setIsLoading(false);
+  //       return false;
+  //     }
+  //     return true;
+  //   } catch (error) {
+  //     setIsValidURL(false);
+  //     console.log(error);
+  //   }
+  // }
 
   async function alreadyExists() {
     try {
@@ -54,20 +54,16 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
       if (!connected) return;
       if (!blinkLink) return;
       setIsLoading(true);
-      const isValid = await handleValidation();
-      if (!isValid) {
-        setIsLoading(false);
-        return;
-      }
+   
       const isExits = await alreadyExists();
       if (isExits) {
         setIsLoading(false);
         return;
       }
-      const response = await fetch('/api/create-blink', {
-        method: 'POST',
+      const response = await fetch("/api/create-blink", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           address: publicKey?.toBase58(),
@@ -80,48 +76,48 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
       onClick();
       return data;
     } catch (error) {
-      toast.error('Failed to create blink');
+      toast.error("Failed to create blink");
     } finally {
       setIsLoading(false);
     }
   }
 
   const Tags = [
-    { label: 'NFTs', value: 'nfts' },
-    { label: 'DEFI', value: 'defi' },
-    { label: 'DAO', value: 'dao' },
-    { label: 'Tokens', value: 'tokens' },
-    { label: 'Social', value: 'social' },
-    { label: 'Prediction Market', value: 'prediction_market' },
-    { label: 'Swap', value: 'swap' },
-    { label: 'Donations', value: 'donations' },
-    { label: 'Trade', value: 'trade' },
-    { label: 'Airdrop', value: 'airdrop' },
-    { label: 'Votes', value: 'votes' },
-    { label: 'Memes', value: 'memes' },
-    { label: 'Staking', value: 'staking' },
-    { label: 'Token gated', value: 'token_gated' },
-    { label: 'Games', value: 'games' },
+    { label: "NFTs", value: "NFTs" },
+    { label: "DEFI", value: "DEFI" },
+    { label: "DAO", value: "DAO" },
+    { label: "Tokens", value: "Tokens" },
+    { label: "Social", value: "Social" },
+    { label: "Prediction Market", value: "Prediction Market" },
+    { label: "Swap", value: "Swap" },
+    { label: "Donations", value: "Donations" },
+    { label: "Trade", value: "Trade" },
+    { label: "Airdrop", value: "Airdrop" },
+    { label: "Votes", value: "Votes" },
+    { label: "Memes", value: "Memes" },
+    { label: "Staking", value: "Staking" },
+    { label: "Token gated", value: "Token gated" },
+    { label: "Games", value: "Games" },
   ];
 
   return (
     <section>
-      <h4 className='font-semibold text-2xl text-center font-sf_pro_rounded'>
+      <h4 className="font-semibold text-2xl text-center font-sf_pro_rounded">
         Share your Blink
       </h4>
-      <div className='flex flex-col gap-4 mt-6'>
-        <div className='flex flex-col space-y-1.5'>
-          <Label htmlFor='link' className='text-sm font-medium mb-1'>
+      <div className="flex flex-col gap-4 mt-6">
+        <div className="flex flex-col space-y-1.5">
+          <Label htmlFor="link" className="text-sm font-medium mb-1">
             Blink URL
           </Label>
           <Input
             onChange={(e) => setBlinkLink(e.target.value)}
-            id='link'
-            placeholder='Enter Blink URL'
+            id="link"
+            placeholder="Enter Blink URL"
             className={`bg-secondary border border-border rounded-xl ${
               !isValidURL || !isNotExists
-                ? 'ring-2 ring-offset-2 ring-red-400'
-                : ''
+                ? "ring-2 ring-offset-2 ring-red-400"
+                : ""
             }`}
             onFocus={() => {
               setIsValidURL(true);
@@ -129,23 +125,23 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
             }}
           />
           {!isValidURL && (
-            <p className='text-xs text-red-500'>Please enter valid blink</p>
+            <p className="text-xs text-red-500">Please enter valid blink</p>
           )}
           {!isNotExists && (
-            <p className='text-xs text-red-500'>Blink already exists</p>
+            <p className="text-xs text-red-500">Blink already exists</p>
           )}
         </div>
-        <div className='flex flex-col space-y-1.5'>
-          <Label htmlFor='link' className='text-sm font-medium mb-1'>
+        <div className="flex flex-col space-y-1.5">
+          <Label htmlFor="link" className="text-sm font-medium mb-1">
             Tags
           </Label>
           <MultipleSelector
-            badgeClassName='bg-white text-black hover:bg-white'
-            className='bg-secondary border border-border rounded-xl'
+            badgeClassName="bg-white text-black hover:bg-white"
+            className="bg-secondary border border-border rounded-xl"
             defaultOptions={Tags}
-            placeholder='Select suitable tags'
+            placeholder="Select suitable tags"
             emptyIndicator={
-              <p className='text-center text-sm text-gray-600 dark:text-gray-400'>
+              <p className="text-center text-sm text-gray-600 dark:text-gray-400">
                 No more tags
               </p>
             }
@@ -158,9 +154,9 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
             e.preventDefault();
             createBlink();
           }}
-          className='w-full rounded-xl'
+          className="w-full rounded-xl"
         >
-          {isLoading ? <Spinner /> : 'Share'}
+          {isLoading ? <Spinner /> : "Share"}
         </Button>
       </div>
     </section>

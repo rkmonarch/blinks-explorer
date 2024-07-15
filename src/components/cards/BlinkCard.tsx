@@ -24,12 +24,12 @@ export default function BlinkCard(props: BlinkCardProps) {
     queryKey: ["blink", props.blink],
     queryFn: ({ queryKey }) => fetchBlink(queryKey[1]),
   });
+
   const { data: verified } = useQuery({
-    queryKey: ["verified", props.website],
+    queryKey: ["verified", props.blink],
     queryFn: ({ queryKey }) => verifyBlink(queryKey[1]),
   });
 
-  console.log(verified);
 
   return (
     <div className="relative  break-inside-avoid group mb-7 w-full">
