@@ -18,10 +18,10 @@ export const GET = async () => {
       actions: [
         {
           href: "/api/actions/register?blink={blink}&tag={tag}",
-          label: "Share you Blink",
+          label: "Share",
           parameters: [
             {
-              name: "Share",
+              name: "blink",
               label: "Blink URL",
             },
           ],
