@@ -16,7 +16,7 @@ interface Action {
   apiPath: string;
 }
 
-interface ActionBlink {
+export interface ActionBlink {
   rules: Action[];
 }
 

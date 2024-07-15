@@ -1,11 +1,16 @@
+import { ActionBlink } from "@/app/share/page";
+import useBlink from "@/hooks/useBlink";
+import { connection } from "@/utils/connection";
 import { Tags, isValidURL } from "@/utils/constant";
 import prisma from "@/utils/prisma-client";
 import {
   ACTIONS_CORS_HEADERS,
   ActionGetResponse,
   ActionPostRequest,
+  ActionPostResponse,
+  createPostResponse,
 } from "@solana/actions";
-import { PublicKey } from "@solana/web3.js";
+import { PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import { NextResponse } from "next/server";
 
 export const GET = async () => {
@@ -42,8 +47,75 @@ export const POST = async (req: Request) => {
   const url = new URL(req.url);
   const blink = url.searchParams.get("blink");
   const tag = url.searchParams.get("tag");
+  const { fetchBlink } = useBlink();
   let account: PublicKey;
   const body: ActionPostRequest = await req.json();
+
+  async function updateActionsJson(blinkLink: string): Promise<string | null> {
+    try {
+      const url = new URL(blinkLink);
+      const host = url.host;
+      const actionsUrl = `https://www.${host}/actions.json`;
+      const response = await fetch(actionsUrl);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${actionsUrl}`);
+      }
+
+      const actionsResponse: ActionBlink = await response.json();
+
+      for (const action of actionsResponse.rules) {
+        const { pathPattern, apiPath } = action;
+        const pathRegex = new RegExp(pathPattern.replace("/**", "(.*)"));
+        const match = url.pathname.match(pathRegex);
+
+        if (match) {
+          const pathSuffix = match[1];
+          const newApiPath = apiPath.replace("/**", `${pathSuffix}`);
+          return newApiPath;
+        }
+      }
+
+      return null;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  async function alreadyExists() {
+    try {
+      const res = await fetch(
+        `www.onlyblinks.com/api/already-exists?link=${req.url}`
+      );
+      const data = await res.json();
+      if (data) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function handleValidation() {
+    try {
+      const isValid = await fetchBlink(req.url);
+      if (!isValid) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      const actionsRespnse = await updateActionsJson(req.url);
+      if (actionsRespnse) {
+        const isValid = await fetchBlink(actionsRespnse);
+        if (!isValid) {
+          return false;
+        }
+        return true;
+      }
+    }
+  }
 
   try {
     account = new PublicKey(body.account);
@@ -64,6 +136,8 @@ export const POST = async (req: Request) => {
 
     const invalidBlink = isValidURL(blink as string);
 
+    const exists = await alreadyExists();
+
     if (!invalidBlink) {
       return NextResponse.json(
         { message: "Invalid URL" },
@@ -73,9 +147,54 @@ export const POST = async (req: Request) => {
       );
     }
 
+    if (exists) {
+      return NextResponse.json(
+        { message: "Blink already exists" },
+        {
+          status: 200,
+        }
+      );
+    }
+
+    const isValid = await handleValidation();
+
+    if (!isValid) {
+      return NextResponse.json(
+        { message: "Invalid Blink URL" },
+        {
+          status: 400,
+        }
+      );
+    }
+
     const existingUser = await prisma.user.findFirst({
       where: {
         address: account.toBase58(),
+      },
+    });
+
+    const transaction = new Transaction().add(
+      SystemProgram.transfer({
+        fromPubkey: new PublicKey(account),
+        toPubkey: new PublicKey(account),
+        lamports: 10000,
+      })
+    );
+
+    transaction.feePayer = new PublicKey(account);
+    const latestBlockhash = await connection.getLatestBlockhash();
+
+    transaction!.recentBlockhash = latestBlockhash.blockhash;
+    transaction!.lastValidBlockHeight = latestBlockhash.lastValidBlockHeight;
+
+    transaction.recentBlockhash = (
+      await connection.getLatestBlockhash()
+    ).blockhash;
+
+    const payload: ActionPostResponse = await createPostResponse({
+      fields: {
+        transaction,
+        message: "Blink registered successfully!",
       },
     });
 
@@ -124,26 +243,11 @@ export const POST = async (req: Request) => {
             },
           },
         });
-        return new Response(
-          JSON.stringify({
-            message: "Blink registered successfully!",
-          }),
-          {
-            status: 200,
-            headers: ACTIONS_CORS_HEADERS,
-          }
-        );
+
+        return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
       }
     }
-    return new Response(
-      JSON.stringify({
-        message: "Blink registered successfully!",
-      }),
-      {
-        status: 200,
-        headers: ACTIONS_CORS_HEADERS,
-      }
-    );
+    return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
   } catch (error) {
     console.log(error);
     return new Response("Internal server error", {
