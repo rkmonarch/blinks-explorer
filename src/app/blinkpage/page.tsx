@@ -31,7 +31,7 @@ export default function BlinkPage() {
   return (
     <section className="mx-auto items-center w-full overflow-auto">
       <div className=" bg-black bg-opacity-[3%] rounded-2xl w-full flex items-center justify-center py-20">
-        <div className="w-full flex flex-col max-w-4xl md:flex-row items-stretch justify-around gap-10">
+        <div className="w-full flex flex-col max-w-5xl md:flex-row items-stretch justify-around gap-10">
           <img
             src={currentBlink?.blink.icon}
             alt=""
