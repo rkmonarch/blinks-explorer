@@ -35,7 +35,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "OnlyBlinks",
-  description: "Share blinks",
+  description:
+    "Onlyblinks is a dedicated blinks explorer, enabling you to share your blinks directly from Twitter.",
   openGraph: {
     images: "https://onlyblinks.com/og.jpg",
   },
@@ -47,14 +48,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Providers>
-      <html lang="en">
-        <body className={`${SF_Pro_Rounded.variable} ${inter.variable}`}>
+    <html lang="en">
+      <body className={`${SF_Pro_Rounded.variable} ${inter.variable}`}>
+        <Providers>
           <ToastProvider>
             <Layout>{children}</Layout>
           </ToastProvider>
-        </body>
-      </html>
-    </Providers>
+        </Providers>
+      </body>
+    </html>
   );
 }

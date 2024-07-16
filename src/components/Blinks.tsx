@@ -2,9 +2,9 @@
 
 import useBlinks from "@/hooks/useBlinks";
 import useBlinkStore from "@/store/blinks";
+import LogoAnimation from "./Logo";
 import BlinkCard from "./cards/BlinkCard";
 import BlinksSkeleton from "./skeletons/BlinksSkeleton";
-import LogoAnimation from "./Logo";
 
 export default function Blinks() {
   const { storeBlinks } = useBlinkStore();
@@ -14,7 +14,7 @@ export default function Blinks() {
 
   if (isLoading) return <BlinksSkeleton />;
 
-  if (storeBlinks.length === 0) {
+  if (storeBlinks.length === 0 || !storeBlinks) {
     return (
       <div className="h-[60vh] flex flex-col items-center gap-2 justify-center w-full border border-black border-opacity-[8%] rounded-xl">
         <LogoAnimation />

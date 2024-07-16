@@ -195,7 +195,6 @@ export default function BlinkPage() {
                     <p className="md:text-md font-medium font-inter text-gray-800">
                       {currentBlink?.username}
                     </p>
-
                     <a
                       href={currentBlink!.website}
                       className="hidden group"
@@ -205,7 +204,7 @@ export default function BlinkPage() {
                         {new URL(currentBlink!.website).hostname}
                       </p>
                     </a>
-                  </div>{" "}
+                  </div>
                 </div>
               </div>
               {/* <div className="flex items-center gap-2">
