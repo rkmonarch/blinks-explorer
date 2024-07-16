@@ -39,13 +39,6 @@ export default function BlinkPage() {
       apiPath: string;
     }[];
   }
-
-  interface ActionBlink {
-    rules: {
-      pathPattern: string;
-      apiPath: string;
-    }[];
-  }
   
   async function updateActionsJson(blinkLink: string): Promise<string | null> {
     try {
