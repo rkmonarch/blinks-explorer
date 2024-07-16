@@ -33,53 +33,134 @@ export default function BlinkPage() {
   const { fetchBlink } = useBlink();
   const router = useRouter();
 
+  interface ActionBlink {
+    rules: {
+      pathPattern: string;
+      apiPath: string;
+    }[];
+  }
+
+  interface ActionBlink {
+    rules: {
+      pathPattern: string;
+      apiPath: string;
+    }[];
+  }
+  
   async function updateActionsJson(blinkLink: string): Promise<string | null> {
     try {
       const url = new URL(blinkLink);
       const host = url.host;
+     try {
       const actionsUrl = `https://${host}/actions.json`;
       const response = await fetch(actionsUrl);
-
+  
       if (!response.ok) {
         throw new Error(`Failed to fetch ${actionsUrl}`);
       }
-
+  
       const actionsResponse: ActionBlink = await response.json();
+  
+      // Iterate through each rule in actionsResponse
       for (const action of actionsResponse.rules) {
         const { pathPattern, apiPath } = action;
-        if (pathPattern === "/") {
-          return `https://www.${host}${apiPath}`;
-        }
-        const pathRegex = new RegExp(pathPattern.replace("/**", "(.*)"));
+  
+        // Construct regex pattern based on pathPattern
+        const regexPattern = `^${pathPattern.replace(/\*\*/g, "(.*)").replace(/\*/g, "([^\/]*)")}$`;
+        const pathRegex = new RegExp(regexPattern);
+  
+        // Match the url pathname with the constructed regex
         const match = url.pathname.match(pathRegex);
-
+  
         if (match) {
-          const pathSuffix = match[1];
-          const newApiPath = apiPath.replace("/**", `${pathSuffix}`);
+          // Extract matched parts from the regex
+          const capturedGroups = match.slice(1);
+  
+          // Replace corresponding parts in apiPath
+          let newApiPath = apiPath;
+          capturedGroups.forEach((group, index) => {
+            newApiPath = newApiPath.replace(`*${index + 1}`, group);
+          });
+  
+          // Replace ** with the first captured group
+          newApiPath = newApiPath.replace(/\*\*/, capturedGroups[0]);
+  
+          // Replace * with the first captured group if it ends with *
+          if (newApiPath.endsWith("*")) {
+            newApiPath = newApiPath.replace(/\*$/, capturedGroups[0]);
+          }
+  
           return newApiPath;
         }
       }
+  
+      return null; // Return null if no match found
+     } catch (error) {
+      const actionsUrl = `https://www.${host}/actions.json`;
+    const response = await fetch(actionsUrl);
 
-      return null;
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${actionsUrl}`);
+    }
+
+    const actionsResponse: ActionBlink = await response.json();
+
+    // Iterate through each rule in actionsResponse
+    for (const action of actionsResponse.rules) {
+      const { pathPattern, apiPath } = action;
+
+      if (pathPattern === "/") {
+        return `https://www.${host}${apiPath}`;
+      }
+
+      // Construct regex pattern based on pathPattern
+      const regexPattern = `^${pathPattern.replace(/\*\*/g, "(.*)").replace(/\*/g, "([^\/]*)")}$`;
+      const pathRegex = new RegExp(regexPattern);
+
+      // Match the url pathname with the constructed regex
+      const match = url.pathname.match(pathRegex);
+
+      if (match) {
+        // Extract matched parts from the regex
+        const capturedGroups = match.slice(1);
+
+        // Replace corresponding parts in apiPath
+        let newApiPath = apiPath;
+        capturedGroups.forEach((group, index) => {
+          newApiPath = newApiPath.replace(`*${index + 1}`, group);
+        });
+
+        // If newApiPath still contains **, replace it with the first captured group
+        if (newApiPath.includes("**")) {
+          newApiPath = newApiPath.replace("**", capturedGroups[0]);
+        }
+
+        return newApiPath;
+      }
+    }
+
+    return null;
+     }
     } catch (error) {
       console.error(error);
       return null;
     }
   }
+  
 
   async function handleValidation() {
     try {
-      // const isValid = await fetchBlink(blinkLink);
-      // if (!isValid) {
-      //   setIsValidURL(false);
-      //   setIsLoading(false);
-      //   return false;
-      // }
-      // const isExits = await alreadyExists();
-      // if (isExits) {
-      //   setIsLoading(false);
-      //   return;
-      // }
+      const isValid = await fetchBlink(blinkLink);
+      if (!isValid) {
+        setIsValidURL(false);
+        setIsLoading(false);
+        return false;
+      }
+      const isExits = await alreadyExists(blinkLink);
+      if (isExits) {
+        setIsLoading(false);
+        return;
+      }
       const isValidU = ss(blinkLink as string);
       if (!isValidU) {
         setIsValidURL(false);
@@ -107,46 +188,48 @@ export default function BlinkPage() {
       await refetch();
       return true;
     } catch (error) {
-      // const actionsRespnse = await updateActionsJson(blinkLink);
-      // console.log(actionsRespnse);
-      // if (actionsRespnse) {
-      //   const isValid = await fetchBlink(actionsRespnse);
-      //   if (!isValid) {
-      //     setIsValidURL(false);
-      //     setIsLoading(false);
-      //     return false;
-      //   }
-      //   const isExits = await alreadyExists();
-      //   if (isExits) {
-      //     setIsLoading(false);
-      //     return;
-      //   }
-      //   const response = await fetch("/api/create-blink", {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({
-      //       address: publicKey?.toBase58(),
-      //       blink: actionsRespnse,
-      //       tags: selectedTags.map((tag) => tag.value),
-      //     }),
-      //   });
-      //   const data = await response.json();
-      //   toast.success("Blink added successfully");
-      //   await refetch();
-      //   setIsValidURL(true);
-      //   setIsLoading(false);
-      //   return true;
-      // }
+      const actionsRespnse = await updateActionsJson(blinkLink);
+
+      if (actionsRespnse) {
+        const isValid = await fetchBlink(actionsRespnse);
+
+        if (!isValid) {
+          setIsValidURL(false);
+          setIsLoading(false);
+          return false;
+        }
+        const isExits = await alreadyExists(actionsRespnse);
+
+        if (isExits) {
+          setIsLoading(false);
+          return;
+        }
+        const response = await fetch("/api/create-blink", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            address: publicKey?.toBase58(),
+            blink: actionsRespnse,
+            tags: selectedTags.map((tag) => tag.value),
+          }),
+        });
+        const data = await response.json();
+        toast.success("Blink added successfully");
+        await refetch();
+        setIsValidURL(true);
+        setIsLoading(false);
+        return true;
+      }
       setIsValidURL(false);
       console.log(error);
     }
   }
 
-  async function alreadyExists() {
+  async function alreadyExists(blink:string) {
     try {
-      const res = await fetch(`/api/already-exists?link=${blinkLink}`);
+      const res = await fetch(`/api/already-exists?link=${blink}`);
       const data = await res.json();
       if (data) {
         setIsNotExists(false);
