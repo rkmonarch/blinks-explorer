@@ -69,6 +69,10 @@ export const POST = async (req: Request) => {
 
       for (const action of actionsResponse.rules) {
         const { pathPattern, apiPath } = action;
+
+        if (pathPattern === "/") {
+          return `https://www.${host}${apiPath}`;
+        } 
         const pathRegex = new RegExp(pathPattern.replace("/**", "(.*)"));
         const match = url.pathname.match(pathRegex);
 
