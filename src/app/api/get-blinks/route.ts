@@ -4,12 +4,18 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest, res: NextResponse) {
     const { tags } = await req.json();
     try {
-        const blinks = await prisma.blink.findMany({
+        let query: any = {
             include: {
                 User: true,
                 Tags: true,
             },
-            where: tags ? {
+            orderBy: {
+                rank: 'asc',  // Sorting by rank in ascending order
+            },
+        };
+
+        if (tags) {
+            query.where = {
                 Tags: {
                     some: {
                         tag: {
@@ -17,11 +23,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
                         },
                     },
                 },
-            } : {},
-            orderBy: {
-                rank: 'asc',  // Sorting by rank in ascending order
-            },
-        });
+            };
+        }
+
+        const blinks = await prisma.blink.findMany(query);
 
         return NextResponse.json(blinks, {
             status: 200
