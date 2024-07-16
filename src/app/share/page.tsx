@@ -11,6 +11,7 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import MultipleSelector from "../../components/ui/multiple-selector";
 import { useRouter } from "next/navigation";
+import { isValidURL as ss } from "@/utils/constant";
 
 interface Action {
   pathPattern: string;
@@ -44,7 +45,6 @@ export default function BlinkPage() {
       }
 
       const actionsResponse: ActionBlink = await response.json();
-
       for (const action of actionsResponse.rules) {
         const { pathPattern, apiPath } = action;
         if (pathPattern === "/") {
@@ -69,16 +69,22 @@ export default function BlinkPage() {
 
   async function handleValidation() {
     try {
-      const isValid = await fetchBlink(blinkLink);
-      if (!isValid) {
+      // const isValid = await fetchBlink(blinkLink);
+      // if (!isValid) {
+      //   setIsValidURL(false);
+      //   setIsLoading(false);
+      //   return false;
+      // }
+      // const isExits = await alreadyExists();
+      // if (isExits) {
+      //   setIsLoading(false);
+      //   return;
+      // }
+      const isValidU = ss(blinkLink as string);
+      if (!isValidU) {
         setIsValidURL(false);
         setIsLoading(false);
         return false;
-      }
-      const isExits = await alreadyExists();
-      if (isExits) {
-        setIsLoading(false);
-        return;
       }
       const response = await fetch("/api/create-blink", {
         method: "POST",
@@ -101,37 +107,38 @@ export default function BlinkPage() {
       await refetch();
       return true;
     } catch (error) {
-      const actionsRespnse = await updateActionsJson(blinkLink);
-      if (actionsRespnse) {
-        const isValid = await fetchBlink(actionsRespnse);
-        if (!isValid) {
-          setIsValidURL(false);
-          setIsLoading(false);
-          return false;
-        }
-        const isExits = await alreadyExists();
-        if (isExits) {
-          setIsLoading(false);
-          return;
-        }
-        const response = await fetch("/api/create-blink", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            address: publicKey?.toBase58(),
-            blink: actionsRespnse,
-            tags: selectedTags.map((tag) => tag.value),
-          }),
-        });
-        const data = await response.json();
-        toast.success("Blink added successfully");
-        await refetch();
-        setIsValidURL(true);
-        setIsLoading(false);
-        return true;
-      }
+      // const actionsRespnse = await updateActionsJson(blinkLink);
+      // console.log(actionsRespnse);
+      // if (actionsRespnse) {
+      //   const isValid = await fetchBlink(actionsRespnse);
+      //   if (!isValid) {
+      //     setIsValidURL(false);
+      //     setIsLoading(false);
+      //     return false;
+      //   }
+      //   const isExits = await alreadyExists();
+      //   if (isExits) {
+      //     setIsLoading(false);
+      //     return;
+      //   }
+      //   const response = await fetch("/api/create-blink", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({
+      //       address: publicKey?.toBase58(),
+      //       blink: actionsRespnse,
+      //       tags: selectedTags.map((tag) => tag.value),
+      //     }),
+      //   });
+      //   const data = await response.json();
+      //   toast.success("Blink added successfully");
+      //   await refetch();
+      //   setIsValidURL(true);
+      //   setIsLoading(false);
+      //   return true;
+      // }
       setIsValidURL(false);
       console.log(error);
     }
