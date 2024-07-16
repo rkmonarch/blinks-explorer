@@ -10,6 +10,7 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import MultipleSelector from "../../components/ui/multiple-selector";
+import { useRouter } from "next/navigation";
 // import mixpanel from "@/utils/mixpanel";
 
 interface Action {
@@ -30,6 +31,7 @@ export default function BlinkPage() {
     useCreateBlinkStore();
   const { refetch } = useBlinks();
   const { fetchBlink } = useBlink();
+  const router = useRouter();
 
   async function updateActionsJson(blinkLink: string): Promise<string | null> {
     try {
@@ -48,7 +50,7 @@ export default function BlinkPage() {
         const { pathPattern, apiPath } = action;
         if (pathPattern === "/") {
           return `https://www.${host}${apiPath}`;
-        } 
+        }
         const pathRegex = new RegExp(pathPattern.replace("/**", "(.*)"));
         const match = url.pathname.match(pathRegex);
 
@@ -160,6 +162,8 @@ export default function BlinkPage() {
         setIsLoading(false);
         return;
       }
+      router.push("/");
+      router;
     } catch (error) {
       toast.error("Failed to create blink");
     } finally {

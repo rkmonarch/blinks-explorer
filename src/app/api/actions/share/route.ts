@@ -72,7 +72,7 @@ export const POST = async (req: Request) => {
 
         if (pathPattern === "/") {
           return `https://www.${host}${apiPath}`;
-        } 
+        }
         const pathRegex = new RegExp(pathPattern.replace("/**", "(.*)"));
         const match = url.pathname.match(pathRegex);
 
@@ -173,7 +173,7 @@ export const POST = async (req: Request) => {
       );
     }
 
-   
+
 
     const existingUser = await prisma.user.findFirst({
       where: {
