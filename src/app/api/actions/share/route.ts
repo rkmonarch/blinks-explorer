@@ -52,8 +52,6 @@ export const POST = async (req: Request) => {
   let account: PublicKey;
   const body: ActionPostRequest = await req.json();
 
-  console.log("blink is", blink);
-
   async function updateActionsJson(blinkLink: string): Promise<string | null> {
     try {
       const url = new URL(blinkLink);
