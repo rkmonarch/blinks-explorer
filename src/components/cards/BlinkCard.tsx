@@ -20,7 +20,7 @@ export default function BlinkCard(props: BlinkCardProps) {
   const { setCurrentBlink } = useBlinkStore();
   const route = useRouter();
   const { verifyBlink } = useRegistry();
-  const { data: blink } = useQuery({
+  const { data: blink, error } = useQuery({
     queryKey: ["blink", props.blink],
     queryFn: ({ queryKey }) => fetchBlink(queryKey[1]),
   });
@@ -30,6 +30,7 @@ export default function BlinkCard(props: BlinkCardProps) {
     queryFn: ({ queryKey }) => verifyBlink(queryKey[1]),
   });
 
+  if (blink === undefined) return;
 
   return (
     <div className="relative  break-inside-avoid group mb-7 w-full">
