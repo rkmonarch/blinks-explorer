@@ -46,6 +46,8 @@ export default function RenderMultipleButtons({
       return "w-1/2";
     } else if (count % 3 === 0) {
       return "w-1/3";
+    } else {
+      return "w-full";
     }
   };
 
