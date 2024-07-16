@@ -31,6 +31,8 @@ export default function Navbar() {
       setLastName(user.last_name);
       setBio(user.bio);
     }
+    const username = `${publicKey?.toBase58().slice(0, 4)}...${publicKey?.toBase58().slice(-4)}`;
+
     if (!user) {
       const createUser = await fetch("/api/create-profile", {
         method: "POST",
@@ -39,7 +41,7 @@ export default function Navbar() {
         },
         body: JSON.stringify({
           address: publicKey,
-          username: publicKey?.toBase58().trim().slice(0, 8),
+          username: username,
           avatar: `https://source.boringavatars.com/beam/120/${publicKey?.toBase58()}`,
         }),
       });
