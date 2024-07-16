@@ -1,5 +1,5 @@
-import Mixpanel from "mixpanel";
+// import Mixpanel from "mixpanel";
 
-var mixpanel = Mixpanel.init(process.env.MIXPANEL_TOKEN as string);
+// var mixpanel = Mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_TOKEN as string);
 
-export default mixpanel;
+// export default mixpanel;

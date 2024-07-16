@@ -32,11 +32,18 @@ export default function BlinkPage() {
     <section className="mx-auto items-center w-full overflow-auto">
       <div className=" bg-black bg-opacity-[3%] rounded-2xl w-full flex items-center justify-center py-20">
         <div className="w-full flex flex-col max-w-5xl md:flex-row items-stretch justify-around gap-10">
-          <img
-            src={currentBlink?.blink.icon}
-            alt=""
-            className="rounded-xl border border-black border-opacity-[8%] aspect-square w-full md:w-1/2 object-cover"
-          />
+          <div className="w-full md:w-1/2 relative">
+            <div
+              className="absolute inset-0 bg-cover bg-center filter blur-sm"
+              style={{ backgroundImage: `url(${currentBlink?.blink.icon})` }}
+            ></div>
+            <img
+              src={currentBlink?.blink.icon}
+              alt=""
+              className="relative rounded-xl border border-black border-opacity-[8%] aspect-square object-contain w-full"
+            />
+          </div>
+
           <div className="w-full md:w-1/2 flex flex-col justify-between p-2">
             <div className="flex flex-col gap-4">
               <div className=" flex flex-col gap-4">

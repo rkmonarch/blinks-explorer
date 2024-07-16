@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import ConnectButton from "./ConnectButton";
 import LogoAnimation from "./Logo";
 import { Button } from "./ui/button";
-import mixpanel from "@/utils/mixpanel";
+// import mixpanel from "@/utils/mixpanel";
 
 export default function Navbar() {
   const { connected, publicKey } = useWallet();
@@ -44,10 +44,10 @@ export default function Navbar() {
         }),
       });
       const user = await createUser.json();
-      mixpanel.track("register", {
-        distinct_id: publicKey?.toBase58(),
-        address: publicKey?.toBase58(),
-      });
+      // mixpanel.track("register", {
+      //   distinct_id: publicKey?.toBase58(),
+      //   address: publicKey?.toBase58(),
+      // });
       setUsername(user.username);
       setAvatar(user.avatar);
       setFirstName(user.first_name);
