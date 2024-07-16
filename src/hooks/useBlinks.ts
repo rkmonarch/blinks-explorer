@@ -1,10 +1,12 @@
 import useBlinkStore from '@/store/blinks';
+import useSearchStore from '@/store/search';
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react'
 
 export default function useBlinks() {
     const [selectedTag, setSelectedTag] = useState<string>("");
     const { setStoreBlinks } = useBlinkStore()
+    const { setFilteredBlinks } = useSearchStore()
 
     async function getBlinks() {
         const response = await fetch("/api/get-blinks", {
@@ -16,6 +18,7 @@ export default function useBlinks() {
         });
         const blinks = await response.json();
         setStoreBlinks(blinks);
+        setFilteredBlinks(blinks)
         return blinks;
     }
 
