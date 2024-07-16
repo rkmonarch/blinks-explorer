@@ -5,16 +5,18 @@ import useBlinkStore from "@/store/blinks";
 import LogoAnimation from "./Logo";
 import BlinkCard from "./cards/BlinkCard";
 import BlinksSkeleton from "./skeletons/BlinksSkeleton";
+import useSearchStore from "@/store/search";
 
 export default function Blinks() {
   const { storeBlinks } = useBlinkStore();
+  const { filteredBlinks } = useSearchStore();
   const { isLoading, isError } = useBlinks();
 
   if (isError) return;
 
   if (isLoading) return <BlinksSkeleton />;
 
-  if (storeBlinks.length === 0 || !storeBlinks) {
+  if (filteredBlinks.length === 0 || !filteredBlinks) {
     return (
       <div className="h-[60vh] flex flex-col items-center gap-2 justify-center w-full border border-black border-opacity-[8%] rounded-xl">
         <LogoAnimation />
@@ -27,7 +29,7 @@ export default function Blinks() {
 
   return (
     <section className="columns-1 sm:columns-2 md:columns-2 lg:columns-3 xl:columns-4 2xl:columns-4 3xl:columns-5 4xl:columns-7 gap-6">
-      {storeBlinks.map((blink: Blink) =>
+      {filteredBlinks.map((blink: Blink) =>
         blink.blink ? (
           <BlinkCard
             blink={blink.blink}
