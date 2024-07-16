@@ -11,6 +11,7 @@ import {
   createPostResponse,
 } from "@solana/actions";
 import { PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import { link } from "fs";
 import { NextResponse } from "next/server";
 
 export const GET = async () => {
@@ -50,6 +51,8 @@ export const POST = async (req: Request) => {
   const { fetchBlink } = useBlink();
   let account: PublicKey;
   const body: ActionPostRequest = await req.json();
+
+  console.log("blink is", blink);
 
   async function updateActionsJson(blinkLink: string): Promise<string | null> {
     try {
@@ -135,22 +138,10 @@ export const POST = async (req: Request) => {
     //   });
     // }
 
-    const invalidBlink = isValidURL(blink as string);
-
-    const exists = await alreadyExists(blink as string);
-
-    if (invalidBlink === true) {
+    const isValidU = isValidURL(blink as string);
+    if (!isValidU) {
       return NextResponse.json(
-        { message: "Invalid URL" },
-        {
-          status: 400,
-        }
-      );
-    }
-
-    if (exists) {
-      return NextResponse.json(
-        { message: "Blink already exists" },
+        { message: "Invalid Blink URL" },
         {
           status: 400,
         }
@@ -167,6 +158,18 @@ export const POST = async (req: Request) => {
         }
       );
     }
+    const exists = await alreadyExists(blink as string);
+
+    if (exists === true) {
+      return NextResponse.json(
+        { message: "Blink already exists" },
+        {
+          status: 400,
+        }
+      );
+    }
+
+   
 
     const existingUser = await prisma.user.findFirst({
       where: {

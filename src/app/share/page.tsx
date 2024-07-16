@@ -45,6 +45,9 @@ export default function BlinkPage() {
 
       for (const action of actionsResponse.rules) {
         const { pathPattern, apiPath } = action;
+        if (pathPattern === "/") {
+          return `https://www.${host}${apiPath}`;
+        } 
         const pathRegex = new RegExp(pathPattern.replace("/**", "(.*)"));
         const match = url.pathname.match(pathRegex);
 
@@ -188,7 +191,7 @@ export default function BlinkPage() {
               <Label htmlFor="link" className="text-lg font-medium mb-1">
                 Blink URL
               </Label>
-              <p className="text-sm text-gray-500">Not Validated</p>
+              {/* <p className="text-sm text-gray-500">Not Validated</p> */}
             </div>
             <Input
               onChange={(e) => setBlinkLink(e.target.value)}
