@@ -1,6 +1,13 @@
-import { UnifiedWalletButton } from "@jup-ag/wallet-adapter";
+import { UnifiedWalletButton, useWallet } from "@jup-ag/wallet-adapter";
+import { Button } from "./ui/button";
 
 export default function ConnectButton() {
+  const { connected, disconnect } = useWallet();
+
+  if (connected) {
+    return <Button onClick={disconnect}>Disconnect</Button>;
+  }
+
   return (
     <UnifiedWalletButton
       currentUserClassName="!focus:outline-none !hover:bg-blue-800 !focus:ring-4 !px-5 !py-3 !text-lg font-normal border border-black !border-opacity-[12%]  !h-10 !rounded-md"
