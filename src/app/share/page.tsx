@@ -37,7 +37,7 @@ export default function BlinkPage() {
     try {
       const url = new URL(blinkLink);
       const host = url.host;
-      const actionsUrl = `https://www.${host}/actions.json`;
+      const actionsUrl = `https://${host}/actions.json`;
       const response = await fetch(actionsUrl);
 
       if (!response.ok) {
