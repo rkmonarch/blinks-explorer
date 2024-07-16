@@ -224,10 +224,12 @@ export const POST = async (req: Request) => {
         },
       });
     } else {
+      const username = `${account.toBase58().slice(0, 4)}...${account.toBase58().slice(-4)}`;
+
       const user = await prisma.user.create({
         data: {
           address: account.toBase58(),
-          username: account.toBase58().trim().slice(0, 8),
+          username: username,
         },
       });
       if (user) {
