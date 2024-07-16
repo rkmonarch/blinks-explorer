@@ -42,7 +42,6 @@ export default function RenderMultipleButtons({
   };
 
   const getButtonClass = () => {
-    console.log(count, count % 2 === 0);
     if (count % 2 === 0) {
       return "w-1/2";
     } else if (count % 3 === 0) {
@@ -51,7 +50,7 @@ export default function RenderMultipleButtons({
   };
 
   return (
-    <div className={`${getButtonClass()} p-2`}>
+    <div className={`${getButtonClass()} p-1`}>
       <Button
         disabled={isLoading}
         key={action.label}
