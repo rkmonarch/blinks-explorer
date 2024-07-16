@@ -10,6 +10,7 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import MultipleSelector from "../../components/ui/multiple-selector";
+import mixpanel from "@/utils/mixpanel";
 
 interface Action {
   pathPattern: string;
@@ -90,6 +91,11 @@ export default function BlinkPage() {
         }),
       });
       const data = await response.json();
+      mixpanel.track("share-blink", {
+        distinct_id: publicKey?.toBase58(),
+        address: publicKey?.toBase58(),
+        blink: blinkLink,
+      });
       toast.success("Blink added successfully");
       await refetch();
       return true;
