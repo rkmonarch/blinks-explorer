@@ -116,7 +116,7 @@ export default function Navbar() {
             router.push("/share");
           }}
         >
-          Share Blink
+          Submit Blink
         </Button>
         <ConnectButton />
       </div>
