@@ -232,6 +232,7 @@ export const POST = async (req: Request) => {
         data: {
           address: account.toBase58(),
           username: username,
+          avatar: `https://source.boringavatars.com/beam/120/${account?.toBase58()}`,
         },
       });
       if (user) {
