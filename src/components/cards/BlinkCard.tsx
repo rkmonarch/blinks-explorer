@@ -7,6 +7,7 @@ import useBlinkStore from "@/store/blinks";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Skeleton } from "../ui/skeleton";
 
 export type BlinkCardProps = {
   blink: string;
@@ -20,7 +21,11 @@ export default function BlinkCard(props: BlinkCardProps) {
   const { setCurrentBlink } = useBlinkStore();
   const route = useRouter();
   const { verifyBlink } = useRegistry();
-  const { data: blink, error } = useQuery({
+  const {
+    data: blink,
+    error,
+    isLoading,
+  } = useQuery({
     queryKey: ["blink", props.blink],
     queryFn: ({ queryKey }) => fetchBlink(queryKey[1]),
   });
@@ -29,6 +34,11 @@ export default function BlinkCard(props: BlinkCardProps) {
     queryKey: ["verified", props.blink],
     queryFn: ({ queryKey }) => verifyBlink(queryKey[1]),
   });
+
+  if (isLoading)
+    return (
+      <Skeleton className="w-full break-inside-avoid aspect-square mb-4 rounded-xl" />
+    );
 
   if (blink === undefined) return;
 
