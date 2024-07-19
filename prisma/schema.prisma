@@ -26,6 +26,8 @@ model Blink {
   address   String
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   rank      Int
+  verified  Boolean?
+  group     String?
   User      User     @relation(fields: [address], references: [address], onDelete: NoAction, onUpdate: NoAction)
   Tags      Tags[]
 }
