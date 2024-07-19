@@ -1,11 +1,37 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import useUserStore from "@/store/user";
 import { UnifiedWalletButton, useWallet } from "@jup-ag/wallet-adapter";
-import { Button } from "./ui/button";
 
 export default function ConnectButton() {
   const { connected, disconnect } = useWallet();
+  const { avatar, first_name } = useUserStore();
 
   if (connected) {
-    return <Button onClick={disconnect}>Disconnect</Button>;
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Avatar className="w-8 h-8">
+            <AvatarImage src={avatar} alt={first_name} />
+            <AvatarFallback>{first_name}</AvatarFallback>
+          </Avatar>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="mr-4">
+          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="cursor-pointer" onClick={disconnect}>
+            Disconnect
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
   }
 
   return (
