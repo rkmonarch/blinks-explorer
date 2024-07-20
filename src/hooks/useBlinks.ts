@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 
 export default function useBlinks() {
     const [selectedTag, setSelectedTag] = useState<string>("");
-    const { setStoreBlinks } = useBlinkStore()
+    const { setStoreBlinks, page } = useBlinkStore()
     const { setFilteredBlinks } = useSearchStore()
 
     async function getBlinks() {
@@ -16,11 +16,11 @@ export default function useBlinks() {
             },
             body: JSON.stringify(selectedTag ? {
                 tags: [selectedTag],
-                page: 1,
+                page: page,
                 limit: 15
             } : {
                 tags: [],
-                page: 1,
+                page: page,
                 limit: 15
             }),
         });
