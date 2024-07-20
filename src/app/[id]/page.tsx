@@ -12,19 +12,68 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useBlinkStore from "@/store/blinks";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import RenderInputs from "../../components/RenderInputs";
 import RenderMultipleButtons from "../../components/RenderMultipleButtons";
 import RenderSingleButton from "../../components/RenderSingleButton";
 import BlinkCard from "../../components/cards/BlinkCard";
+import { useQuery } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
+import useBlinks from "@/hooks/useBlinks";
+import useBlink from "@/hooks/useBlink";
+import { useState } from "react";
+import LogoAnimation from "@/components/Logo";
 
 export default function BlinkPage() {
-  const { storeBlinks, currentBlink } = useBlinkStore();
-  const route = useRouter();
+  const { storeBlinks, currentBlink, setCurrentBlink } = useBlinkStore();
+  const route = usePathname();
+  const { fetchBlink } = useBlink();
+  const [error, setError] = useState(false);
+  const id = route.replace("/", "");
+  async function getCurrentBlink() {
+    try {
+      const currentBlink = await fetch(
+        `/api/get-blink/?id=${id}`
+      );
+      const data = await currentBlink.json();
+      const blink = await fetchBlink(data.data.blink);
 
-  if (!currentBlink) {
-    return route.push("/");
+      setCurrentBlink(
+        blink,
+        data.data.blink,
+        data.data.User.avatar,
+        data.data.User.username,
+        data.data.verified
+      );
+      return currentBlink.json();
+    } catch (error) {
+      setError(true);
+      console.error(error);
+    }
+  }
+
+  const { data: blink, isLoading } = useQuery({
+    queryKey: ["blink", id],
+    queryFn: getCurrentBlink,
+    enabled: !currentBlink,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading...
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="h-[60vh] flex flex-col items-center gap-2 justify-center w-full border border-black border-opacity-[8%] rounded-xl">
+        <LogoAnimation />
+        <p className="text-gray-500 font-regular text-xl">
+          Oops... blink again!
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -51,7 +100,7 @@ export default function BlinkPage() {
                 <div className="flex flex-row items-center justify-between w-full">
                   <div className="flex flex-row justify-start items-center gap-2">
                     <p className="font-inter text-[16px] font-semibold text-black">
-                      {currentBlink.verified ? "Verified" : "Not Verified"}
+                      {currentBlink?.verified ? "Verified" : "Not Verified"}
                     </p>
                     <div>
                       {currentBlink?.verified ? (
@@ -125,14 +174,14 @@ export default function BlinkPage() {
                           className="cursor-pointer"
                           onClick={() => {
                             navigator.clipboard.writeText(
-                              currentBlink?.website
+                              currentBlink?.website!
                             );
                             toast.success("Copied successfully");
                           }}
                         >
                           <div className="flex items-center gap-2 bg-gray-100 rounded-md px-3 py-1">
                             <p className="text-xs font-semibold truncate text-gray-500">
-                              {currentBlink.website}
+                              {currentBlink?.website}
                             </p>
                             <div className="text-gray-500">
                               <svg
@@ -211,7 +260,7 @@ export default function BlinkPage() {
                       {currentBlink?.username}
                     </p>
                     <a
-                      href={currentBlink!.website}
+                      href={currentBlink?.website}
                       className="hidden group"
                       target="_blank"
                     >
@@ -222,10 +271,6 @@ export default function BlinkPage() {
                   </div>
                 </div>
               </div>
-              {/* <div className="flex items-center gap-2">
-                <Badge className="bg-white text-black py-1 px-3">Nft</Badge>
-                <Badge className="bg-white text-black py-1 px-3">Airdrop</Badge>
-              </div> */}
             </div>
             <div className="mt-4 border border-black border-opacity-10 p-4 rounded-xl">
               {currentBlink?.blink?.links?.actions?.some(
@@ -266,8 +311,8 @@ export default function BlinkPage() {
                 </div>
               ) : (
                 <RenderSingleButton
-                  blink={currentBlink.blink}
-                  link={currentBlink.website}
+                  blink={currentBlink?.blink!}
+                  link={currentBlink?.website!}
                 />
               )}
             </div>
@@ -278,12 +323,10 @@ export default function BlinkPage() {
         <p className="text-lg font-medium font-inter">Explore other Blinks</p>
         <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {storeBlinks.map((blinkItem: Blink) =>
-            currentBlink.website === blinkItem.blink ? null : (
+            currentBlink?.website === blinkItem.blink ? null : (
               <BlinkCard
-                blink={blinkItem.blink}
+                blink={blinkItem}
                 website={new URL(blinkItem.blink).hostname}
-                username={blinkItem.User.username}
-                avatar={blinkItem.User.avatar}
                 key={blinkItem.blink}
               />
             )

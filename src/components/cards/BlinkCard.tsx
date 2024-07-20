@@ -8,11 +8,10 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "../ui/skeleton";
+import { Blink } from "../Blinks";
 
 export type BlinkCardProps = {
-  blink: string;
-  username: string;
-  avatar: string;
+  blink: Blink;
   website: string;
 };
 
@@ -26,12 +25,12 @@ export default function BlinkCard(props: BlinkCardProps) {
     error,
     isLoading,
   } = useQuery({
-    queryKey: ["blink", props.blink],
+    queryKey: ["blink", props.blink.blink],
     queryFn: ({ queryKey }) => fetchBlink(queryKey[1]),
   });
 
   const { data: verified } = useQuery({
-    queryKey: ["verified", props.blink],
+    queryKey: ["verified", props.blink.blink],
     queryFn: ({ queryKey }) => verifyBlink(queryKey[1]),
   });
 
@@ -48,12 +47,12 @@ export default function BlinkCard(props: BlinkCardProps) {
         onClick={() => {
           setCurrentBlink(
             blink!,
-            props.blink,
-            props.avatar,
-            props.username,
+            props.blink.blink,
+            props.blink.User.avatar,
+            props.blink.User.username,
             verified || false
           );
-          route.push("/blinkpage");
+          route.push(`/${props.blink.id}`);
         }}
         src={blink?.icon}
         alt=""
@@ -64,14 +63,14 @@ export default function BlinkCard(props: BlinkCardProps) {
           <Avatar className="w-4 h-4 sm:w-6 sm:h-6">
             <AvatarImage
               src={
-                props.avatar === null
+                props.blink.User.avatar === null
                   ? "https://github.com/shadcn.png"
-                  : props.avatar
+                  : props.blink.User.avatar
               }
             />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <p className="text-sm font-medium font-inter">{props.username}</p>
+          <p className="text-sm font-medium font-inter">{props.blink.User.username}</p>
         </div>
         <Link
           className="cursor-pointer hover:text-blue-500 text-gray-400 flex items-center gap-1 text-xs font-normal font-inter"

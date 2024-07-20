@@ -34,10 +34,8 @@ export default function Blinks() {
   {filteredBlinks.map((blink: Blink) =>
     blink.blink ? (
       <BlinkCard
-        blink={blink.blink}
+        blink={blink}
         website={new URL(blink.blink).hostname}
-        username={blink.User.username}
-        avatar={blink.User.avatar}
         key={blink.blink}
       />
     ) : null
