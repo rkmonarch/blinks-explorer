@@ -1,18 +1,21 @@
 import React from "react";
 import { Skeleton } from "../ui/skeleton";
 
-export default function BlinksSkeleton() {
+export default function BlinksSkeleton({ length }: { length: number }) {
   return (
-    <section className="columns-1 sm:columns-2 md:columns-2 lg:columns-3 xl:columns-3 2xl:columns-4 3xl:columns-5 4xl:columns-7 gap-6">
-      <Skeleton className="w-full break-inside-avoid h-96 mb-4 rounded-xl" />
-      <Skeleton className="w-full break-inside-avoid h-96 mb-4 rounded-xl" />
-      <Skeleton className="w-full break-inside-avoid h-80 mb-4 rounded-xl" />
-      <Skeleton className="w-full break-inside-avoid h-72 mb-4 rounded-xl" />
-      <Skeleton className="w-full break-inside-avoid h-96 mb-4 rounded-xl" />
-      <Skeleton className="w-full break-inside-avoid h-80 mb-4 rounded-xl" />
-      <Skeleton className="w-full break-inside-avoid h-96 mb-4 rounded-xl" />
-      <Skeleton className="w-full break-inside-avoid h-72 mb-4 rounded-xl" />
-      <Skeleton className="w-full break-inside-avoid h-72 mb-4 rounded-xl" />
+    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {Array.from({ length: length }).map((el) => (
+        <div className="w-full">
+          <Skeleton className="w-full break-inside-avoid aspect-square mb-4 rounded-xl" />
+          <div className="flex items-center gap-2 justify-between">
+            <div className="flex items-center gap-2 w-full">
+              <Skeleton className="w-4 h-4 sm:w-6 sm:h-6 rounded-full" />
+              <Skeleton className="w-1/2 h-4" />
+            </div>
+            <Skeleton className="w-1/3 h-4" />
+          </div>
+        </div>
+      ))}
     </section>
   );
 }

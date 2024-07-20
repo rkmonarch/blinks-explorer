@@ -172,11 +172,6 @@ export default function BlinkPage() {
         }),
       });
       const data = await response.json();
-      // mixpanel.track("share-blink", {
-      //   distinct_id: publicKey?.toBase58(),
-      //   address: publicKey?.toBase58(),
-      //   blink: blinkLink,
-      // });
       toast.success("Blink added successfully");
       await refetch();
       return true;
@@ -244,8 +239,7 @@ export default function BlinkPage() {
         setIsLoading(false);
         return;
       }
-      router.push("/");
-      router;
+      return router.push("/");
     } catch (error) {
       toast.error("Failed to create blink");
     } finally {
@@ -254,6 +248,7 @@ export default function BlinkPage() {
   }
 
   const Tags = [
+    { label: "Blinkathon", value: "Blinkathon" },
     { label: "NFTs", value: "NFTs" },
     { label: "DEFI", value: "DEFI" },
     { label: "DAO", value: "DAO" },
@@ -283,7 +278,6 @@ export default function BlinkPage() {
               <Label htmlFor="link" className="text-lg font-medium mb-1">
                 Blink URL
               </Label>
-              {/* <p className="text-sm text-gray-500">Not Validated</p> */}
             </div>
             <Input
               onChange={(e) => setBlinkLink(e.target.value)}

@@ -12,23 +12,70 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useBlinkStore from "@/store/blinks";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import RenderInputs from "../../components/RenderInputs";
 import RenderMultipleButtons from "../../components/RenderMultipleButtons";
 import RenderSingleButton from "../../components/RenderSingleButton";
 import BlinkCard from "../../components/cards/BlinkCard";
+import { useQuery } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
+import useBlinks from "@/hooks/useBlinks";
+import useBlink from "@/hooks/useBlink";
+import { useState } from "react";
+import LogoAnimation from "@/components/Logo";
 
 export default function BlinkPage() {
-  const { storeBlinks, currentBlink } = useBlinkStore();
-  const route = useRouter();
+  const { storeBlinks, currentBlink, setCurrentBlink } = useBlinkStore();
+  const route = usePathname();
+  const { fetchBlink } = useBlink();
+  const [error, setError] = useState(false);
+  const id = route.replace("/", "");
+  async function getCurrentBlink() {
+    try {
+      const currentBlink = await fetch(`/api/get-blink/?id=${id}`);
+      const data = await currentBlink.json();
+      const blink = await fetchBlink(data.data.blink);
 
-  if (!currentBlink) {
-    return route.push("/");
+      setCurrentBlink(
+        blink,
+        data.data.blink,
+        data.data.User.avatar,
+        data.data.User.username,
+        data.data.verified
+      );
+      return currentBlink.json();
+    } catch (error) {
+      setError(true);
+      console.error(error);
+    }
+  }
+
+  const { data: blink, isLoading } = useQuery({
+    queryKey: ["blink", id],
+    queryFn: getCurrentBlink,
+    enabled: !currentBlink,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading...
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="h-[60vh] flex flex-col items-center gap-2 justify-center w-full border border-black border-opacity-[8%] rounded-xl">
+        <LogoAnimation />
+        <p className="text-gray-500 font-regular text-xl">
+          Oops... blink again!
+        </p>
+      </div>
+    );
   }
 
   return (
-    <section className="mx-auto items-center w-full overflow-auto">
+    <section className="mx-auto items-center w-full overflow-auto ">
       <div className=" md:bg-black md:bg-opacity-[3%] rounded-2xl w-full flex items-center justify-center py-8 md:py-20 md:px-2">
         <div className="w-full flex flex-col max-w-5xl md:flex-row items-stretch justify-around gap-10">
           <div className="w-full md:w-1/2 relative border border-gray-300 rounded-xl">
@@ -51,7 +98,7 @@ export default function BlinkPage() {
                 <div className="flex flex-row items-center justify-between w-full">
                   <div className="flex flex-row justify-start items-center gap-2">
                     <p className="font-inter text-[16px] font-semibold text-black">
-                      {currentBlink.verified ? "Verified" : "Not Verified"}
+                      {currentBlink?.verified ? "Verified" : "Not Verified"}
                     </p>
                     <div>
                       {currentBlink?.verified ? (
@@ -75,8 +122,8 @@ export default function BlinkPage() {
                           height="24"
                           fill="none"
                           stroke="#D8000C"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           stroke-width="2"
                         >
                           <path d="M12 13V8m0 8.375v.001M3 12a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" />
@@ -99,24 +146,24 @@ export default function BlinkPage() {
                             stroke="black"
                             stroke-opacity="0.5"
                             stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12C13 12.5523 12.5523 13 12 13Z"
                             stroke="black"
                             stroke-opacity="0.5"
                             stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M12 20C11.4477 20 11 19.5523 11 19C11 18.4477 11.4477 18 12 18C12.5523 18 13 18.4477 13 19C13 19.5523 12.5523 20 12 20Z"
                             stroke="black"
                             stroke-opacity="0.5"
                             stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </DropdownMenuTrigger>
@@ -125,14 +172,14 @@ export default function BlinkPage() {
                           className="cursor-pointer"
                           onClick={() => {
                             navigator.clipboard.writeText(
-                              currentBlink?.website
+                              currentBlink?.website!
                             );
                             toast.success("Copied successfully");
                           }}
                         >
                           <div className="flex items-center gap-2 bg-gray-100 rounded-md px-3 py-1">
                             <p className="text-xs font-semibold truncate text-gray-500">
-                              {currentBlink.website}
+                              {currentBlink?.website}
                             </p>
                             <div className="text-gray-500">
                               <svg
@@ -211,7 +258,7 @@ export default function BlinkPage() {
                       {currentBlink?.username}
                     </p>
                     <a
-                      href={currentBlink!.website}
+                      href={currentBlink?.website}
                       className="hidden group"
                       target="_blank"
                     >
@@ -222,10 +269,6 @@ export default function BlinkPage() {
                   </div>
                 </div>
               </div>
-              {/* <div className="flex items-center gap-2">
-                <Badge className="bg-white text-black py-1 px-3">Nft</Badge>
-                <Badge className="bg-white text-black py-1 px-3">Airdrop</Badge>
-              </div> */}
             </div>
             <div className="mt-4 border border-black border-opacity-10 p-4 rounded-xl">
               {currentBlink?.blink?.links?.actions?.some(
@@ -266,8 +309,8 @@ export default function BlinkPage() {
                 </div>
               ) : (
                 <RenderSingleButton
-                  blink={currentBlink.blink}
-                  link={currentBlink.website}
+                  blink={currentBlink?.blink!}
+                  link={currentBlink?.website!}
                 />
               )}
             </div>
@@ -276,14 +319,12 @@ export default function BlinkPage() {
       </div>
       <div className="flex flex-col items-start gap-6 py-6">
         <p className="text-lg font-medium font-inter">Explore other Blinks</p>
-        <section className="columns-1 sm:columns-2 md:columns-2 lg:columns-3 xl:columns-4 2xl:columns-4 3xl:columns-5 4xl:columns-7 gap-6">
+        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {storeBlinks.map((blinkItem: Blink) =>
-            currentBlink.website === blinkItem.blink ? null : (
+            currentBlink?.website === blinkItem.blink ? null : (
               <BlinkCard
-                blink={blinkItem.blink}
+                blink={blinkItem}
                 website={new URL(blinkItem.blink).hostname}
-                username={blinkItem.User.username}
-                avatar={blinkItem.User.avatar}
                 key={blinkItem.blink}
               />
             )

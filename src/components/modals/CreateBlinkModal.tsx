@@ -83,6 +83,7 @@ export default function CreateBlinkModal({ onClick }: { onClick: () => void }) {
   }
 
   const Tags = [
+    { label: "Blinkathon", value: "Blinkathon" },
     { label: "NFTs", value: "NFTs" },
     { label: "DEFI", value: "DEFI" },
     { label: "DAO", value: "DAO" },

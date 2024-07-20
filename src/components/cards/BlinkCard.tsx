@@ -8,11 +8,10 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "../ui/skeleton";
+import { Blink } from "../Blinks";
 
 export type BlinkCardProps = {
-  blink: string;
-  username: string;
-  avatar: string;
+  blink: Blink;
   website: string;
 };
 
@@ -26,52 +25,63 @@ export default function BlinkCard(props: BlinkCardProps) {
     error,
     isLoading,
   } = useQuery({
-    queryKey: ["blink", props.blink],
+    queryKey: ["blink", props.blink.blink],
     queryFn: ({ queryKey }) => fetchBlink(queryKey[1]),
   });
 
   const { data: verified } = useQuery({
-    queryKey: ["verified", props.blink],
+    queryKey: ["verified", props.blink.blink],
     queryFn: ({ queryKey }) => verifyBlink(queryKey[1]),
   });
 
   if (isLoading)
     return (
-      <Skeleton className="w-full break-inside-avoid aspect-square mb-4 rounded-xl" />
+      <div className="w-full">
+        <Skeleton className="w-full break-inside-avoid aspect-square mb-4 rounded-xl" />
+        <div className="flex items-center gap-2 justify-between">
+          <div className="flex items-center gap-2 w-full">
+            <Skeleton className="w-4 h-4 sm:w-6 sm:h-6 rounded-full" />
+            <Skeleton className="w-1/2 h-4" />
+          </div>
+          <Skeleton className="w-1/3 h-4" />
+        </div>
+      </div>
     );
 
   if (blink === undefined) return;
 
   return (
-    <div className="relative  break-inside-avoid group mb-7 w-full">
+    <div className="relative group mb-7 w-full">
       <img
         onClick={() => {
           setCurrentBlink(
             blink!,
-            props.blink,
-            props.avatar,
-            props.username,
+            props.blink.blink,
+            props.blink.User.avatar,
+            props.blink.User.username,
             verified || false
           );
-          route.push("/blinkpage");
+          route.push(`/${props.blink.id}`);
         }}
         src={blink?.icon}
         alt=""
-        className="w-full border border-black border-opacity-10 bg-white rounded-xl cursor-pointer md:min-h-60"
+        className="w-full border border-black border-opacity-10 bg-white rounded-xl cursor-pointer md:min-h-60 aspect-square object-cover"
       />
       <div className="flex items-center justify-between mt-1">
         <div className="flex items-center gap-2">
           <Avatar className="w-4 h-4 sm:w-6 sm:h-6">
             <AvatarImage
               src={
-                props.avatar === null
+                props.blink.User.avatar === null
                   ? "https://github.com/shadcn.png"
-                  : props.avatar
+                  : props.blink.User.avatar
               }
             />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <p className="text-sm font-medium font-inter">{props.username}</p>
+          <p className="text-sm font-medium font-inter">
+            {props.blink.User.username}
+          </p>
         </div>
         <Link
           className="cursor-pointer hover:text-blue-500 text-gray-400 flex items-center gap-1 text-xs font-normal font-inter"

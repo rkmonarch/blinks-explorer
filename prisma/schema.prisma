@@ -26,6 +26,8 @@ model Blink {
   address   String
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   rank      Int
+  verified  Boolean?
+  group     String?
   User      User     @relation(fields: [address], references: [address], onDelete: NoAction, onUpdate: NoAction)
   Tags      Tags[]
 }
@@ -36,4 +38,13 @@ model Tags {
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   blink_id  String   @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   Blink     Blink    @relation(fields: [blink_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Groups {
+  id         String   @id @default(uuid()) @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  group_name String
+  blinks     Json     @db.Json
+  website    String
 }

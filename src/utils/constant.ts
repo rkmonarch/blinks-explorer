@@ -1,4 +1,5 @@
 export const Tags = [
+  "Blinkathon",
   "NFTs",
   "DEFI",
   "DAO",
