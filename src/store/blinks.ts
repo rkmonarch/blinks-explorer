@@ -12,7 +12,9 @@ export interface IBlinkStore {
     username: string;
     verified: boolean,
   } | null;
+  totalPage: number
   setPage: (page: number) => void;
+  setTotalPage: (totalPage: number) => void
   setCurrentBlink: (blink: Blink, website: string, avatar: string, username: string, verified: boolean) => void;
   setStoreBlinks: (blink: StoredBlinks) => void;
 }
@@ -20,10 +22,12 @@ export interface IBlinkStore {
 const useBlinkStore = create<IBlinkStore>((set) => ({
   currentBlink: null,
   page: 1,
+  totalPage: 1,
   setCurrentBlink: (blink: Blink, website: string, avatar: string, username: string, verified: boolean) => set({ currentBlink: { blink, website, avatar, username, verified } }),
   storeBlinks: [],
-  setPage: (page: number) => set({ page }),
-  setStoreBlinks: (blink: StoredBlinks) => set({ storeBlinks: blink }),
+  setPage: (page) => set({ page }),
+  setStoreBlinks: (blink) => set({ storeBlinks: blink }),
+  setTotalPage: (totalPage) => set({ totalPage })
 }));
 
 export default useBlinkStore;

@@ -32,9 +32,7 @@ export default function BlinkPage() {
   const id = route.replace("/", "");
   async function getCurrentBlink() {
     try {
-      const currentBlink = await fetch(
-        `/api/get-blink/?id=${id}`
-      );
+      const currentBlink = await fetch(`/api/get-blink/?id=${id}`);
       const data = await currentBlink.json();
       const blink = await fetchBlink(data.data.blink);
 
@@ -77,7 +75,7 @@ export default function BlinkPage() {
   }
 
   return (
-    <section className="mx-auto items-center w-full overflow-auto">
+    <section className="mx-auto items-center w-full overflow-auto ">
       <div className=" md:bg-black md:bg-opacity-[3%] rounded-2xl w-full flex items-center justify-center py-8 md:py-20 md:px-2">
         <div className="w-full flex flex-col max-w-5xl md:flex-row items-stretch justify-around gap-10">
           <div className="w-full md:w-1/2 relative border border-gray-300 rounded-xl">
@@ -124,8 +122,8 @@ export default function BlinkPage() {
                           height="24"
                           fill="none"
                           stroke="#D8000C"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           stroke-width="2"
                         >
                           <path d="M12 13V8m0 8.375v.001M3 12a9 9 0 1 1 18 0 9 9 0 0 1-18 0Z" />
@@ -148,24 +146,24 @@ export default function BlinkPage() {
                             stroke="black"
                             stroke-opacity="0.5"
                             stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12C13 12.5523 12.5523 13 12 13Z"
                             stroke="black"
                             stroke-opacity="0.5"
                             stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                           <path
                             d="M12 20C11.4477 20 11 19.5523 11 19C11 18.4477 11.4477 18 12 18C12.5523 18 13 18.4477 13 19C13 19.5523 12.5523 20 12 20Z"
                             stroke="black"
                             stroke-opacity="0.5"
                             stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       </DropdownMenuTrigger>

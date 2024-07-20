@@ -36,13 +36,22 @@ export default function BlinkCard(props: BlinkCardProps) {
 
   if (isLoading)
     return (
-      <Skeleton className="w-full break-inside-avoid aspect-square mb-4 rounded-xl" />
+      <div className="w-full">
+        <Skeleton className="w-full break-inside-avoid aspect-square mb-4 rounded-xl" />
+        <div className="flex items-center gap-2 justify-between">
+          <div className="flex items-center gap-2 w-full">
+            <Skeleton className="w-4 h-4 sm:w-6 sm:h-6 rounded-full" />
+            <Skeleton className="w-1/2 h-4" />
+          </div>
+          <Skeleton className="w-1/3 h-4" />
+        </div>
+      </div>
     );
 
   if (blink === undefined) return;
 
   return (
-    <div className="relative  break-inside-avoid group mb-7 w-full">
+    <div className="relative group mb-7 w-full">
       <img
         onClick={() => {
           setCurrentBlink(
@@ -70,7 +79,9 @@ export default function BlinkCard(props: BlinkCardProps) {
             />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <p className="text-sm font-medium font-inter">{props.blink.User.username}</p>
+          <p className="text-sm font-medium font-inter">
+            {props.blink.User.username}
+          </p>
         </div>
         <Link
           className="cursor-pointer hover:text-blue-500 text-gray-400 flex items-center gap-1 text-xs font-normal font-inter"

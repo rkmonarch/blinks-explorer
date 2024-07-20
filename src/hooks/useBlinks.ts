@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 
 export default function useBlinks() {
     const [selectedTag, setSelectedTag] = useState<string>("");
-    const { setStoreBlinks, page } = useBlinkStore()
+    const { setStoreBlinks, page, setTotalPage } = useBlinkStore()
     const { setFilteredBlinks } = useSearchStore()
 
     async function getBlinks() {
@@ -27,6 +27,7 @@ export default function useBlinks() {
         const blinks = await response.json();
         setStoreBlinks(blinks.data);
         setFilteredBlinks(blinks.data)
+        setTotalPage(blinks.totalPages)
         return blinks;
     }
 

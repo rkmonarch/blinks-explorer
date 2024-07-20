@@ -5,16 +5,22 @@ import LogoAnimation from "./Logo";
 import BlinkCard from "./cards/BlinkCard";
 import BlinksSkeleton from "./skeletons/BlinksSkeleton";
 import useSearchStore from "@/store/search";
+import useBlinkStore from "@/store/blinks";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useState } from "react";
 
 export default function Blinks() {
-  const { filteredBlinks } = useSearchStore();
-  const { isLoading, isError } = useBlinks();
+  const { storeBlinks, setStoreBlinks, page, setPage, totalPage } =
+    useBlinkStore();
+  const { filteredBlinks, setFilteredBlinks } = useSearchStore();
+  const { isLoading, isError, selectedTag } = useBlinks();
+  const [hasMore, setHasMore] = useState(true);
 
   if (isError) return;
 
-  if (isLoading) return <BlinksSkeleton />;
+  if (isLoading) return <BlinksSkeleton length={8} />;
 
-  if (filteredBlinks.length === 0 || !filteredBlinks) {
+  if (!filteredBlinks || filteredBlinks.length === 0) {
     return (
       <div className="h-[60vh] flex flex-col items-center gap-2 justify-center w-full border border-black border-opacity-[8%] rounded-xl">
         <LogoAnimation />
@@ -25,20 +31,57 @@ export default function Blinks() {
     );
   }
 
-  return (
-    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-  {filteredBlinks.map((blink: Blink) =>
-    blink.blink ? (
-      <BlinkCard
-        blink={blink}
-        website={new URL(blink.blink).hostname}
-        key={blink.blink}
-      />
-    ) : null
-  )}
-</section>
+  const fetchMoreData = async () => {
+    const response = await fetch("/api/get-blinks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(
+        selectedTag
+          ? {
+              tags: [selectedTag],
+              page: page + 1,
+              limit: 15,
+            }
+          : {
+              tags: [],
+              page: page + 1,
+              limit: 15,
+            }
+      ),
+    });
+    const data = await response.json();
+    if (data.data) {
+      setStoreBlinks([...storeBlinks, ...data.data]);
+      setFilteredBlinks([...storeBlinks, ...data.data]);
+      setPage(page + 1);
 
-  
+      if (totalPage === page) {
+        setHasMore(false);
+      }
+    }
+  };
+
+  return (
+    <InfiniteScroll
+      dataLength={filteredBlinks.length}
+      next={fetchMoreData}
+      hasMore={hasMore}
+      loader={<BlinksSkeleton length={4} />}
+    >
+      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {filteredBlinks.map((blink: Blink) =>
+          blink.blink ? (
+            <BlinkCard
+              blink={blink}
+              website={new URL(blink.blink).hostname}
+              key={blink.blink}
+            />
+          ) : null
+        )}
+      </section>
+    </InfiniteScroll>
   );
 }
 
