@@ -57,7 +57,7 @@ export default function BlinkCard(props: BlinkCardProps) {
         }}
         src={blink?.icon}
         alt=""
-        className="w-full border border-black border-opacity-10 bg-white rounded-xl cursor-pointer md:min-h-60"
+        className="w-full border border-black border-opacity-10 bg-white rounded-xl cursor-pointer md:min-h-60 aspect-square object-cover"
       />
       <div className="flex items-center justify-between mt-1">
         <div className="flex items-center gap-2">

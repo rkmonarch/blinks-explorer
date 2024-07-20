@@ -12,6 +12,8 @@ export default function Blinks() {
   const { filteredBlinks } = useSearchStore();
   const { isLoading, isError } = useBlinks();
 
+  console.log(filteredBlinks);
+
   if (isError) return;
 
   if (isLoading) return <BlinksSkeleton />;
@@ -28,19 +30,21 @@ export default function Blinks() {
   }
 
   return (
-    <section className="columns-1 sm:columns-2 md:columns-2 lg:columns-3 xl:columns-4 2xl:columns-4 3xl:columns-5 4xl:columns-7 gap-6">
-      {filteredBlinks.map((blink: Blink) =>
-        blink.blink ? (
-          <BlinkCard
-            blink={blink.blink}
-            website={new URL(blink.blink).hostname}
-            username={blink.User.username}
-            avatar={blink.User.avatar}
-            key={blink.blink}
-          />
-        ) : null
-      )}
-    </section>
+    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+  {filteredBlinks.map((blink: Blink) =>
+    blink.blink ? (
+      <BlinkCard
+        blink={blink.blink}
+        website={new URL(blink.blink).hostname}
+        username={blink.User.username}
+        avatar={blink.User.avatar}
+        key={blink.blink}
+      />
+    ) : null
+  )}
+</section>
+
+  
   );
 }
 

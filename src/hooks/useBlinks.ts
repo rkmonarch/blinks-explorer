@@ -14,11 +14,19 @@ export default function useBlinks() {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(selectedTag ? { tags: [selectedTag] } : {}),
+            body: JSON.stringify(selectedTag ? {
+                tags: [selectedTag],
+                page: 1,
+                limit: 15
+            } : {
+                tags: [],
+                page: 1,
+                limit: 15
+            }),
         });
         const blinks = await response.json();
-        setStoreBlinks(blinks);
-        setFilteredBlinks(blinks)
+        setStoreBlinks(blinks.data);
+        setFilteredBlinks(blinks.data)
         return blinks;
     }
 

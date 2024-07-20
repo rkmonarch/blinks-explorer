@@ -276,7 +276,7 @@ export default function BlinkPage() {
       </div>
       <div className="flex flex-col items-start gap-6 py-6">
         <p className="text-lg font-medium font-inter">Explore other Blinks</p>
-        <section className="columns-1 sm:columns-2 md:columns-2 lg:columns-3 xl:columns-4 2xl:columns-4 3xl:columns-5 4xl:columns-7 gap-6">
+        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {storeBlinks.map((blinkItem: Blink) =>
             currentBlink.website === blinkItem.blink ? null : (
               <BlinkCard
