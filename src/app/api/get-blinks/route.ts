@@ -19,6 +19,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
             take,
         };
 
+        let countQuery: any = {};
+
         if (tags.length > 0) {
             query.where = {
                 Tags: {
@@ -29,11 +31,20 @@ export async function POST(req: NextRequest, res: NextResponse) {
                     },
                 },
             };
+            countQuery.where = query.where;
         }
 
-        const blinks = await prisma.blink.findMany(query);
+        const [blinks, totalCount] = await Promise.all([
+            prisma.blink.findMany(query),
+            prisma.blink.count(countQuery)
+        ]);
 
-        return NextResponse.json(blinks, {
+        const totalPages = Math.ceil(totalCount / limit);
+
+        return NextResponse.json({
+            data: blinks,
+            totalPages
+        }, {
             status: 200,
         });
     } catch (error) {
