@@ -1,18 +1,14 @@
 "use client";
 
 import useBlinks from "@/hooks/useBlinks";
-import useBlinkStore from "@/store/blinks";
 import LogoAnimation from "./Logo";
 import BlinkCard from "./cards/BlinkCard";
 import BlinksSkeleton from "./skeletons/BlinksSkeleton";
 import useSearchStore from "@/store/search";
 
 export default function Blinks() {
-  const { storeBlinks } = useBlinkStore();
   const { filteredBlinks } = useSearchStore();
   const { isLoading, isError } = useBlinks();
-
-  console.log(filteredBlinks);
 
   if (isError) return;
 
