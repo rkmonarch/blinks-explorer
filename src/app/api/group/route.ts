@@ -57,48 +57,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const blinks = await prisma.blink.findMany(query);
 
-    // Group blinks by domain
-    const groupedBlinks = blinks.reduce((acc: any, blink: any) => {
-      const url = new URL(blink.blink);
-      const domain = url.hostname;
-      const groupName = extractGroupName(domain);
-
-      if (!acc[domain]) {
-        acc[domain] = {
-          group_name: groupName,
-          website: domain,
-          blinks: []
-        };
-      }
-      acc[domain].blinks.push({
-        id: blink.id,
-        blink: blink.blink,
-        address: blink.address,
-        createdAt: blink.createdAt,
-        rank: blink.rank,
-      });
-      return acc;
-    }, {} as GroupedBlinks);
-
-    // Create an array of group data
-    const groupDataArray = Object.keys(groupedBlinks).map((domain) => ({
-      group_name: groupedBlinks[domain].group_name,
-      website: groupedBlinks[domain].website,
-      blinks: groupedBlinks[domain].blinks,
-    }));
-
-    // Save group data to the Groups table
-    await Promise.all(groupDataArray.map(async (group) => {
-      await prisma.groups.create({
-        data: {
-          group_name: group.group_name,
-          website: group.website,
-          blinks: group.blinks,
-        },
-      });
-    }));
-
-    return NextResponse.json(groupDataArray, {
+    return NextResponse.json(blinks, {
       status: 200,
     });
  
