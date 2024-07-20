@@ -35,7 +35,7 @@ function extractGroupName(domain: string): string {
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  const { tags } = await req.json();
+  const { group } = await req.json();
   try {
     let query: any = {
       include: {
@@ -47,16 +47,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
       },
     };
 
-    if (tags) {
+    if (group) {
       query.where = {
-        Tags: {
-          some: {
-            tag: {
-              in: tags,
-            },
-          },
+       group: {
+          equals: group,
         },
-      };
+       }
     }
 
     const blinks = await prisma.blink.findMany(query);
