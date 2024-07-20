@@ -26,9 +26,14 @@ export default function RenderSingleButton({
       if (!publicKey) return;
       const result = await fetchTransaction(link, publicKey!.toBase58());
       let transaction = result.transaction;
+      console.log(result);
       const tx = await getRawTransaction(transaction);
       const sign = await sendTransaction(tx as Transaction, connection);
-      toast.success("Transaction successfull");
+      if (result?.message) {
+        toast.success(result.message);
+      } else {
+        toast.success("Transaction successfull");
+      }
     } catch (e) {
       toast.error("Failed to submit transaction");
       console.error(e);
