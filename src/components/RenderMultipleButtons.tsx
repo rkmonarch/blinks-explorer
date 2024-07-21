@@ -13,12 +13,12 @@ export default function RenderMultipleButtons({
   action,
   link,
   count,
-  index,
+  disabled,
 }: {
   action: Action;
   link: string;
   count: number;
-  index: number;
+  disabled: boolean;
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const { fetchTransaction } = useBlink();
@@ -59,11 +59,15 @@ export default function RenderMultipleButtons({
   return (
     <div className={`${getButtonClass()} p-1`}>
       <Button
-        disabled={isLoading}
+        disabled={isLoading || disabled}
         key={action.label}
         onClick={async () => {
           let actionUrl = action.href;
-          handlePress("https://" + host + actionUrl);
+          if (actionUrl.includes("https")) {
+            handlePress(actionUrl);
+          } else {
+            handlePress("https://" + host + actionUrl);
+          }
         }}
         variant={"secondary"}
         className="w-full"

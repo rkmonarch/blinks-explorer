@@ -12,9 +12,11 @@ import { toast } from "react-toastify";
 export default function RenderSingleButton({
   blink,
   link,
+  disabled,
 }: {
   blink: Blink;
   link: string;
+  disabled: boolean;
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const { fetchTransaction } = useBlink();
@@ -26,7 +28,6 @@ export default function RenderSingleButton({
       if (!publicKey) return;
       const result = await fetchTransaction(link, publicKey!.toBase58());
       let transaction = result.transaction;
-      console.log(result);
       const tx = await getRawTransaction(transaction);
       const sign = await sendTransaction(tx as Transaction, connection);
       if (result?.message) {
@@ -44,7 +45,7 @@ export default function RenderSingleButton({
 
   return (
     <Button
-      disabled={isLoading}
+      disabled={isLoading || disabled}
       onClick={async () => {
         handlePress(link);
       }}

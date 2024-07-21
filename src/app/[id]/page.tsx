@@ -281,12 +281,12 @@ export default function BlinkPage() {
                         <RenderMultipleButtons
                           key={index}
                           action={action}
+                          disabled={currentBlink.blink.disabled ?? false}
                           count={
                             currentBlink.blink.links?.actions?.filter(
                               (action) => !action.parameters
                             ).length || 0
                           }
-                          index={index}
                           link={currentBlink.website}
                         />
                       );
@@ -302,6 +302,7 @@ export default function BlinkPage() {
                       <RenderInputs
                         key={index}
                         action={action}
+                        disabled={currentBlink.blink.disabled ?? false}
                         link={currentBlink.website}
                       />
                     ) : null
@@ -311,6 +312,7 @@ export default function BlinkPage() {
                 <RenderSingleButton
                   blink={currentBlink?.blink!}
                   link={currentBlink?.website!}
+                  disabled={currentBlink?.blink.disabled ?? false}
                 />
               )}
             </div>

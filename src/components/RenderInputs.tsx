@@ -13,9 +13,11 @@ import { toast } from "react-toastify";
 export default function RenderInputs({
   action,
   link,
+  disabled,
 }: {
   action: Action;
   link: string;
+  disabled: boolean;
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const { fetchTransaction } = useBlink();
@@ -52,7 +54,7 @@ export default function RenderInputs({
         />
       ))}
       <Button
-        disabled={isLoading}
+        disabled={isLoading || disabled}
         key={action.label}
         variant={"secondary"}
         size={"lg"}
