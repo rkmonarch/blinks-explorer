@@ -2,11 +2,35 @@ import prisma from "@/utils/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  const { tags, page = 1, limit = 10 } = await req.json();
+  const { tags = [], searchTerm = "", page = 1, limit = 10 } = await req.json();
   const skip = (page - 1) * limit;
   const take = limit;
 
   try {
+    let whereClause: any = {
+      rank: {
+        gt: 0,
+      },
+    };
+
+    if (searchTerm) {
+      whereClause.blink = {
+        contains: searchTerm,
+        mode: "insensitive",
+      };
+    }
+
+    // Adding tags filter to the where clause
+    if (tags.length > 0) {
+      whereClause.Tags = {
+        some: {
+          tag: {
+            in: tags,
+          },
+        },
+      };
+    }
+
     let query: any = {
       include: {
         User: true,
@@ -17,31 +41,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
       },
       skip,
       take,
-      where: {
-        rank: {
-          gt: 0, // Only include blinks with rank greater than 0
-        },
-      },
+      where: whereClause,
     };
 
     let countQuery: any = {
-      where: {
-        rank: {
-          gt: 0, // Only count blinks with rank greater than 0
-        },
-      },
+      where: whereClause,
     };
-
-    if (tags.length > 0) {
-      query.where.Tags = {
-        some: {
-          tag: {
-            in: tags,
-          },
-        },
-      };
-      countQuery.where.Tags = query.where.Tags;
-    }
 
     const [blinks, totalCount] = await Promise.all([
       prisma.blink.findMany(query),
