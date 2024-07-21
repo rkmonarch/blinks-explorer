@@ -7,14 +7,21 @@ import BlinksSkeleton from "./skeletons/BlinksSkeleton";
 import useSearchStore from "@/store/search";
 import useBlinkStore from "@/store/blinks";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Blinks() {
   const { storeBlinks, setStoreBlinks, page, setPage, totalPage } =
     useBlinkStore();
   const { filteredBlinks, setFilteredBlinks } = useSearchStore();
-  const { isLoading, isError, selectedTag } = useBlinks();
-  const [hasMore, setHasMore] = useState(true);
+  const { isLoading, isError, selectedTag, hasMore, setHasMore } = useBlinks();
+
+  useEffect(() => {
+    if (totalPage === 1) {
+      setHasMore(false);
+    } else {
+      setHasMore(true);
+    }
+  }, [totalPage]);
 
   if (isError) return;
 
