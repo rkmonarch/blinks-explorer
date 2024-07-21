@@ -8,7 +8,7 @@ import useSearchStore from "@/store/search";
 
 export default function Filter() {
   const { selectedTag, setSelectedTag } = useBlinks();
-  const { setStoreBlinks } = useBlinkStore();
+  const { setStoreBlinks, setPage } = useBlinkStore();
   const { setFilteredBlinks } = useSearchStore();
 
   return (
@@ -32,6 +32,7 @@ export default function Filter() {
           <Button
             key={tag}
             onClick={() => {
+              setPage(1);
               setSelectedTag(tag);
               setFilteredBlinks([]);
               setStoreBlinks([]);
