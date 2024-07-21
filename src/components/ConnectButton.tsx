@@ -8,10 +8,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import useUserStore from "@/store/user";
+import formatAddress from "@/utils/formatAddress";
 import { UnifiedWalletButton, useWallet } from "@jup-ag/wallet-adapter";
 
 export default function ConnectButton() {
-  const { connected, disconnect } = useWallet();
+  const { connected, disconnect, publicKey } = useWallet();
   const { avatar, first_name } = useUserStore();
 
   if (connected) {
@@ -24,7 +25,9 @@ export default function ConnectButton() {
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="mr-4">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>
+            {formatAddress(publicKey?.toBase58() || "")}
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="cursor-pointer" onClick={disconnect}>
             Disconnect

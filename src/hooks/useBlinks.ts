@@ -42,6 +42,8 @@ export default function useBlinks() {
     enabled: !!selectedTag || selectedTag === "",
   });
 
+  console.log(isLoading, "adasdas");
+
   return {
     isError,
     isLoading,

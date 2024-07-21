@@ -15,6 +15,8 @@ export default function Blinks() {
   const { filteredBlinks, setFilteredBlinks } = useSearchStore();
   const { isLoading, isError, selectedTag, hasMore, setHasMore } = useBlinks();
 
+  console.log(isLoading);
+
   useEffect(() => {
     if (totalPage === 1) {
       setHasMore(false);
@@ -31,9 +33,9 @@ export default function Blinks() {
     return (
       <div className="h-[60vh] flex flex-col items-center gap-2 justify-center w-full border border-black border-opacity-[8%] rounded-xl">
         <LogoAnimation />
-        <p className="text-gray-500 font-regular text-xl">
+        {/* <p className="text-gray-500 font-regular text-xl">
           Oops... blink again!
-        </p>
+        </p> */}
       </div>
     );
   }
