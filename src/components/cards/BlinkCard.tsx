@@ -1,45 +1,96 @@
-import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import LinkIcon from "@/icons/LinkIcon";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import BlinkModal from "../modals/BlinkModal";
+"use client";
 
-type BlinkCardProps = {
-  image: string;
-  //   avatar: string;
-  //   username: string;
-  //   website: string;
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import useBlink from "@/hooks/useBlink";
+import useRegistry from "@/hooks/useRegistry";
+import useBlinkStore from "@/store/blinks";
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Skeleton } from "../ui/skeleton";
+import { Blink } from "../Blinks";
+
+export type BlinkCardProps = {
+  blink: Blink;
+  website: string;
 };
 
 export default function BlinkCard(props: BlinkCardProps) {
-  return (
-    <Dialog>
-      <DialogTrigger className="break-inside-avoid mb-4 w-full">
-        <img src={props.image} alt="" className="rounded-xl w-full" />
-        <div className="flex items-center justify-between mt-3">
-          <div className="flex items-center gap-2">
-            <Avatar className="w-6 h-6">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <p className="text-sm">SEND</p>
+  const { fetchBlink } = useBlink();
+  const { setCurrentBlink } = useBlinkStore();
+  const route = useRouter();
+  const { verifyBlink } = useRegistry();
+  const {
+    data: blink,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["blink", props.blink.blink],
+    queryFn: ({ queryKey }) => fetchBlink(queryKey[1]),
+  });
+
+  const { data: verified } = useQuery({
+    queryKey: ["verified", props.blink.blink],
+    queryFn: ({ queryKey }) => verifyBlink(queryKey[1]),
+  });
+
+  if (isLoading)
+    return (
+      <div className="w-full">
+        <Skeleton className="w-full break-inside-avoid aspect-square mb-4 rounded-xl" />
+        <div className="flex items-center gap-2 justify-between">
+          <div className="flex items-center gap-2 w-full">
+            <Skeleton className="w-4 h-4 sm:w-6 sm:h-6 rounded-full" />
+            <Skeleton className="w-1/2 h-4" />
           </div>
-          <div className="flex items-center gap-1">
-            <LinkIcon width={16} height={16} color="#B5B5B5" />
-            <p className="text-xs text-gray-500">www.tensor.trade</p>
-          </div>
+          <Skeleton className="w-1/3 h-4" />
         </div>
-      </DialogTrigger>
-      <DialogContent className="w-screen h-full backdrop-blur-2xl bg-white bg-opacity-40">
-        <BlinkModal />
-      </DialogContent>
-    </Dialog>
+      </div>
+    );
+
+  if (blink === undefined) return;
+
+  return (
+    <div className="relative group mb-7 w-full">
+      <img
+        onClick={() => {
+          setCurrentBlink(
+            blink!,
+            props.blink.blink,
+            props.blink.User.avatar,
+            props.blink.User.username,
+            verified || false
+          );
+          route.push(`/${props.blink.id}`);
+        }}
+        src={blink?.icon}
+        alt=""
+        className="w-full border border-black border-opacity-10 bg-white rounded-xl cursor-pointer md:min-h-60 aspect-square object-cover"
+      />
+      <div className="flex items-center justify-between mt-1">
+        <div className="flex items-center gap-2">
+          <Avatar className="w-4 h-4 sm:w-6 sm:h-6">
+            <AvatarImage
+              src={
+                props.blink.User.avatar === null
+                  ? "https://github.com/shadcn.png"
+                  : props.blink.User.avatar
+              }
+            />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <p className="text-sm font-medium font-inter">
+            {props.blink.User.username}
+          </p>
+        </div>
+        <Link
+          className="cursor-pointer hover:text-blue-500 text-gray-400 flex items-center gap-1 text-xs font-normal font-inter"
+          href={`https://${props.website}`}
+          target="_blank"
+        >
+          {props.website}
+        </Link>
+      </div>
+    </div>
   );
 }
